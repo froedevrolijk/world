@@ -1,0 +1,9 @@
+-Dsbt.repository.config=repositories
+-Dsbt.override.build.repos=false
+-Djava.net.useSystemProxies=true
+-Dfile.encoding=UTF8
+-Djavax.net.ssl.trustStore=/Users/tk59en/.sbt/ing/trusted.keystore
+-Djavax.net.ssl.trustStorePassword=changeit
+-Dmaven.wagon.http.ssl.insecure=true
+-Dsbt.gigahorse=false
+-Dsbt.repository.secure=false
