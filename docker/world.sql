@@ -5356,28 +5356,28 @@ INSERT INTO countrylanguage VALUES ('RUS', 'Belorussian', false, 0.30000001);
 INSERT INTO countrylanguage VALUES ('USA', 'Portuguese', false, 0.2);
 
 
-ALTER TABLE city
-    ADD CONSTRAINT city_pkey PRIMARY KEY (id);
-
-ALTER TABLE country
-    ADD CONSTRAINT country_pkey PRIMARY KEY (code);
-
-ALTER TABLE countrylanguage
-    ADD CONSTRAINT countrylanguage_pkey PRIMARY KEY (countrycode, language);
-
-ALTER TABLE country
-    ADD CONSTRAINT country_capital_fkey FOREIGN KEY (capital) REFERENCES city(id);
-
-ALTER TABLE countrylanguage
-    ADD CONSTRAINT countrylanguage_countrycode_fkey FOREIGN KEY (countrycode) REFERENCES country(code);
-
-
-CREATE OR REPLACE FUNCTION getCountries(n integer, OUT c refcursor) AS '
-BEGIN
-    OPEN c FOR SELECT name FROM country LIMIT n;
-END;
-' LANGUAGE plpgsql;
-
-COMMIT;
+--ALTER TABLE city
+--    ADD CONSTRAINT city_pkey PRIMARY KEY (id);
+--
+--ALTER TABLE country
+--    ADD CONSTRAINT country_pkey PRIMARY KEY (code);
+--
+--ALTER TABLE countrylanguage
+--    ADD CONSTRAINT countrylanguage_pkey PRIMARY KEY (countrycode, language);
+--
+--ALTER TABLE country
+--    ADD CONSTRAINT country_capital_fkey FOREIGN KEY (capital) REFERENCES city(id);
+--
+--ALTER TABLE countrylanguage
+--    ADD CONSTRAINT countrylanguage_countrycode_fkey FOREIGN KEY (countrycode) REFERENCES country(code);
+--
+--
+--CREATE OR REPLACE FUNCTION getCountries(n integer, OUT c refcursor) AS '
+--BEGIN
+--    OPEN c FOR SELECT name FROM country LIMIT n;
+--END;
+--' LANGUAGE plpgsql;
+--
+--COMMIT;
 
 ANALYZE;

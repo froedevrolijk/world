@@ -37,7 +37,7 @@ object CommandRoutes {
         HttpRoutes.of[F] {
           case req @ POST -> Root / "add-city" =>
             for {
-              city         <- req.as[City]
+//              city         <- req.as[City]
               insertedCity <- commandService.insertSingle(testCity)
             } yield insertedCity
             Ok("The value was inserted into the database")

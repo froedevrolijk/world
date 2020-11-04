@@ -2,23 +2,23 @@
 
 #### Start project
 Connect to docker container:  
-`docker-compose -f docker-compose-skunk.yml up -d`
+`docker-compose -f docker-compose.yml up -d`
 
 Then:  
 `sbt run`
 
 #### Check the running container
 Launch a bash terminal within the container:  
-`docker exec -it country-db bash`
+`docker exec -it world-db bash`
 
 Connect to postgres database:
-`psql -h localhost -U user countrydb`
+`psql -h localhost -U user world`
 
 List databases:  
 `\l`
 
-Switch connection to database `countrydb`:  
-`\c countrydb`
+Switch connection to database `world`:  
+`\c worlddb`
 
 List tables:  
 `\dt`

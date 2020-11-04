@@ -3,13 +3,13 @@ version: '3.5'
 services:
 
   db:
-    container_name: country-db
+    container_name: world-db
     image: postgres:11
     restart: always
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: countrydb
+      POSTGRES_DB: world
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
