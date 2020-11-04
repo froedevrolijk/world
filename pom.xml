@@ -2,11 +2,11 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>default</groupId>
-    <artifactId>mastery-day-2019-q3_2.12</artifactId>
+    <artifactId>world_2.12</artifactId>
     <packaging>jar</packaging>
-    <description>mastery-day-2019-q3</description>
+    <description>world</description>
     <version>0.1.0-SNAPSHOT</version>
-    <name>mastery-day-2019-q3</name>
+    <name>world</name>
     <organization>
         <name>default</name>
     </organization>

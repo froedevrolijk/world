@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - develop
-      - frontend
   pull_request:
     branches:
       - master
@@ -49,4 +48,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/mastery-day-2019-q3:0.1
+          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world:0.1

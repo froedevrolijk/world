@@ -17,7 +17,7 @@ services:
 
 #  api:
 #    container_name: world-api
-#    image: mastery-day-2019-q3:0.1
+#    image: world:0.1
 #    restart: always
 #    ports:
 #      - '9000:9000'

@@ -68,4 +68,4 @@ or
 `docker-compose -f docker-compose.yml up -d`
 
 ## API
-`docker run -it -p 9000:9001 --rm --name api mastery-day-2019-q3:0.1`
+`docker run -it -p 9000:9001 --rm --name world-api world-api:0.1`
