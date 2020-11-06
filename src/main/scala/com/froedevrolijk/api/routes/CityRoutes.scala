@@ -24,7 +24,7 @@ object CityRoutes {
       implicit val decoder: EntityDecoder[F, QueryCity] = jsonOf[F, QueryCity]
 
       override def getCities: HttpRoutes[F] =
-        HttpRoutes.of {
+        HttpRoutes.of[F] {
           case req @ POST -> Root / "cities" =>
             val citiesOutput = for {
               request <- req.as[QueryCity]

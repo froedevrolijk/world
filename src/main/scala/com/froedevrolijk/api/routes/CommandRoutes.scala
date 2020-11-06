@@ -1,64 +1,58 @@
 package com.froedevrolijk.api.routes
 
-import cats.effect.Async
+import cats.FlatMap.ops._
+import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
 import com.froedevrolijk.api.db.command.CommandService
-import com.froedevrolijk.api.db.datamodels.{ City, QueryCommand, QueryCommandList }
+import com.froedevrolijk.api.db.datamodels.{ City, QueryCountry }
+import com.froedevrolijk.api.session.RunSession
 import io.circe.generic.auto._
-import org.http4s.{ EntityDecoder, HttpRoutes }
+import natchez.Trace.Implicits.noop
 import org.http4s.circe.jsonOf
 import org.http4s.dsl.Http4sDsl
-import io.circe.generic.auto._
-import io.circe.syntax._
-import org.http4s.circe._
-import org.http4s.dsl.Http4sDsl
-import org.http4s.{ HttpRoutes, _ }
-import cats.FlatMap.ops._
-import cats.MonadError
-import cats.implicits.catsKernelStdGroupForByte
-import com.froedevrolijk.api.exception.NotFoundException
-import io.circe.Json
+import org.http4s.{ EntityDecoder, HttpRoutes }
+import skunk.Session
 
 trait CommandRoutes[F[_]] extends Http4sDsl[F] {
 
-  def insertCity: HttpRoutes[F]
+  def insertCitySingle: HttpRoutes[F]
+
+  def insertCityMany: HttpRoutes[F]
 
 }
 
 object CommandRoutes {
 
-  def impl[F[_]: Async](commandService: CommandService[F]): CommandRoutes[F] =
+  def impl[F[_]: Sync: Async: ContextShift: ConcurrentEffect: Timer](
+//      commandService: CommandService[F]
+  ): CommandRoutes[F] =
     new CommandRoutes[F] {
 
-      implicit val decoderList: EntityDecoder[F, City] = jsonOf[F, City]
+      implicit val cityDecoder: EntityDecoder[F, City]           = jsonOf[F, City]
+      implicit val cityListDecoder: EntityDecoder[F, List[City]] = jsonOf[F, List[City]]
 
-      val testCity = City(1, "ac", "wef", "wr", 12)
+      def session: Resource[F, Session[F]] =
+        for {
+          s <- RunSession.impl[F].session
+        } yield s
 
-      override def insertCity: HttpRoutes[F] =
+      override def insertCitySingle: HttpRoutes[F] =
         HttpRoutes.of[F] {
-          case req @ POST -> Root / "add-city" =>
-            for {
-//              city         <- req.as[City]
-              insertedCity <- commandService.insertSingle(testCity)
-            } yield insertedCity
-            Ok("The value was inserted into the database")
-          // TODO add row to database
-          // TODO add success / fail handling
+          case req @ POST -> Root / "add-city-single" =>
+            val addOutput = for {
+              city <- req.as[City]
+              _    <- session.map(CommandService.impl[F](_)).use(s => s.insertSingle(city))
+            } yield ()
+            Ok(addOutput)
+        }
 
+      override def insertCityMany: HttpRoutes[F] =
+        HttpRoutes.of[F] {
+          case req @ POST -> Root / "add-city-many" =>
+            val addOutput = for {
+              cities <- req.as[List[City]]
+              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMany(cities))
+            } yield ()
+            Ok(addOutput)
         }
     }
 }
-
-//            val a = req.as[QueryCommand].flatMap { v =>
-//              v.req match {
-//                case Some(value) => value.asJson.noSpaces.to)
-//                case None        =>
-//              }
-//            }
-
-//              request <- req.as[QueryCommand] // TODO handle Option
-//              request2 <- request.req match {
-//                case Some(value) => M.pure(commandService.insertSingle(testCity))
-//                case _           => M.raiseError(NotFoundException("No value was provided"))
-//              }
-//            } yield request2
-//            Ok("The value was inserted into the database")
