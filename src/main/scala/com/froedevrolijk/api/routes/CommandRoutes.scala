@@ -3,14 +3,16 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
 import com.froedevrolijk.api.db.command.CommandService
-import com.froedevrolijk.api.db.datamodels.{ City, QueryCountry }
+import com.froedevrolijk.api.db.datamodels.{ Cities, City, QueryCountry }
 import com.froedevrolijk.api.session.RunSession
 import io.circe.generic.auto._
 import natchez.Trace.Implicits.noop
-import org.http4s.circe.jsonOf
+import org.http4s.circe.{ jsonOf, toMessageSynax }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{ EntityDecoder, HttpRoutes }
 import skunk.Session
+import io.circe._
+import io.circe.generic.semiauto.deriveDecoder
 
 trait CommandRoutes[F[_]] extends Http4sDsl[F] {
 
@@ -27,8 +29,8 @@ object CommandRoutes {
   ): CommandRoutes[F] =
     new CommandRoutes[F] {
 
-      implicit val cityDecoder: EntityDecoder[F, City]           = jsonOf[F, City]
-      implicit val cityListDecoder: EntityDecoder[F, List[City]] = jsonOf[F, List[City]]
+      implicit val cityDecoder: EntityDecoder[F, City] = jsonOf[F, City]
+      implicit val decodeCityList: Decoder[Cities]     = deriveDecoder[Cities]
 
       def session: Resource[F, Session[F]] =
         for {
@@ -49,7 +51,7 @@ object CommandRoutes {
         HttpRoutes.of[F] {
           case req @ POST -> Root / "add-city-many" =>
             val addOutput = for {
-              cities <- req.as[List[City]]
+              cities <- req.decodeJson
               _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMany(cities))
             } yield ()
             Ok(addOutput)

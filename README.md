@@ -44,7 +44,7 @@ EOF
 
 Add city:
 ```
-curl -k -v -X POST http://localhost:8086/add-city \
+curl -k -v -X POST http://localhost:8086/add-city-single \
 -H 'Content-Type: text/json' \
 -d @- << EOF
 {
@@ -53,6 +53,32 @@ curl -k -v -X POST http://localhost:8086/add-city \
   "countryCode": "NLD",
   "district": "Gelderland",
   "population": "152463"
+}
+EOF
+```
+
+Add multiple cities:
+```
+curl -k -v -X POST http://localhost:8086/add-city-many \
+-H 'Content-Type: text/json' \
+-d @- << EOF
+{
+    "cityList": [
+        {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        },
+        {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        }
+    ]
 }
 EOF
 ```
@@ -69,3 +95,45 @@ or
 
 ## API
 `docker run -it -p 9000:9001 --rm --name world-api world-api:0.1`
+
+```json
+{
+    "cityList": [
+        {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        },
+        {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        }
+    ]
+}
+```
+
+```json
+{
+    "cityList": [
+        { "city": {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        }},
+        { "city": {
+            "id": "5",
+            "name": "Nijmegen",
+            "countryCode": "NLD",
+            "district": "Gelderland",
+            "population": "152463"
+        }}
+    ]
+}
+```
