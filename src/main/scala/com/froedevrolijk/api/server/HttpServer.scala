@@ -31,7 +31,6 @@ object HttpServer {
       ): F[Unit] = {
 
         val routes = Combinator.impl[F].apiRoutesCombinator.orNotFound
-        // TODO use servicecombinator
 
         BlazeServerBuilder[F](ConcurrentEffect[F], Timer[F])
           .withHttpApp(routes)

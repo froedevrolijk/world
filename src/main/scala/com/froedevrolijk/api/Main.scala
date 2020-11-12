@@ -6,12 +6,10 @@ import com.froedevrolijk.api.server.HttpServer
 import com.froedevrolijk.api.session.RunSession
 import com.froedevrolijk.api.utils.Log
 import com.typesafe.config.ConfigFactory
-import natchez.Trace
+import natchez.Trace.Implicits.noop
 import net.ceedubs.ficus.Ficus.{ toFicusConfig, _ }
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import skunk.Session
-import natchez.Trace.Implicits.noop
-import cats.FlatMap.ops._
 
 object Main extends IOApp with Log {
 
@@ -33,20 +31,8 @@ object Main extends IOApp with Log {
         .impl[F]
         .server(serverConfig = serverConfigStore, appConfig = appConfig)
       api
-
-    // ADD COMBINATOR
-
     }
 
   }
 
 }
-
-/*
- * - session.use...
- * - certificates / sslcontext
- * - run server
- * - github
- * */
-
-// - Add types for query

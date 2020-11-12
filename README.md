@@ -98,7 +98,7 @@ or
 
 ```json
 {
-    "cityList": [
+    "cities": [
         {
             "id": "5",
             "name": "Nijmegen",
@@ -117,23 +117,14 @@ or
 }
 ```
 
-```json
-{
-    "cityList": [
-        { "city": {
-            "id": "5",
-            "name": "Nijmegen",
-            "countryCode": "NLD",
-            "district": "Gelderland",
-            "population": "152463"
-        }},
-        { "city": {
-            "id": "5",
-            "name": "Nijmegen",
-            "countryCode": "NLD",
-            "district": "Gelderland",
-            "population": "152463"
-        }}
-    ]
-}
-```
+### TODOS
+- add logging
+- add error handling
+- add unit / integration tests
+- add database migration
+
+Furthermore: 
+- add containers setup locally
+- deploy containers to GCP
+- Github Actions
+

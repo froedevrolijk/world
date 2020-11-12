@@ -26,21 +26,19 @@ trait Combinator[F[_]] {
 
   def commandRoute2: HttpRoutes[F]
 
+  def commandRoute3: HttpRoutes[F]
+
   def apiRoutesCombinator: HttpRoutes[F]
 
 }
 
 object Combinator {
 
-//  private val serverConfigStore = ConfigFactory.load().getConfig("store").as[ServerStoreConfig]
-//  private val appConfig         = ConfigFactory.load().getConfig("api").as[AppConfig]
-
   def impl[F[_]: Async: ContextShift: ConcurrentEffect: Timer](implicit
       S: Session[F],
       B: Bracket[F, Throwable]
   ): Combinator[F] =
     new Combinator[F] {
-      // def impl // implicit session
 
       override def cityService: CityService[F] =
         CityService.impl[F]
@@ -60,19 +58,20 @@ object Combinator {
       override def commandService: CommandService[F] =
         CommandService.impl(S)
 
-//      override def commandRoute: HttpRoutes[F] =
-//        CommandRoutes.impl[F](commandService).insertCity
-
       override def commandRoute: HttpRoutes[F] =
         CommandRoutes.impl[F].insertCitySingle
 
       override def commandRoute2: HttpRoutes[F] =
         CommandRoutes.impl[F].insertCityMany
 
+      override def commandRoute3: HttpRoutes[F] =
+        CommandRoutes.impl[F].getAll
+
       override def apiRoutesCombinator: HttpRoutes[F] = {
-        val routes = List(healthRouteApi, countryRoute, cityRoutes, commandRoute, commandRoute2)
+        val routes = List(healthRouteApi, countryRoute, cityRoutes, commandRoute, commandRoute2, commandRoute3)
         routes.foldLeft(HttpRoutes.empty[F])(_ <+> _)
       }
+
     }
 
 }

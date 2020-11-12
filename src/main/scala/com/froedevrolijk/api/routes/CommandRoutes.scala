@@ -3,22 +3,25 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
 import com.froedevrolijk.api.db.command.CommandService
-import com.froedevrolijk.api.db.datamodels.{ Cities, City, QueryCountry }
+import com.froedevrolijk.api.db.datamodels.{ Cities, City }
 import com.froedevrolijk.api.session.RunSession
+import io.circe._
 import io.circe.generic.auto._
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.syntax.EncoderOps
 import natchez.Trace.Implicits.noop
-import org.http4s.circe.{ jsonOf, toMessageSynax }
+import org.http4s.circe.{ jsonEncoder, jsonOf, toMessageSynax }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{ EntityDecoder, HttpRoutes }
 import skunk.Session
-import io.circe._
-import io.circe.generic.semiauto.deriveDecoder
 
 trait CommandRoutes[F[_]] extends Http4sDsl[F] {
 
   def insertCitySingle: HttpRoutes[F]
 
   def insertCityMany: HttpRoutes[F]
+
+  def getAll: HttpRoutes[F]
 
 }
 
@@ -40,21 +43,30 @@ object CommandRoutes {
       override def insertCitySingle: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "add-city-single" =>
-            val addOutput = for {
+            val result = for {
               city <- req.as[City]
               _    <- session.map(CommandService.impl[F](_)).use(s => s.insertSingle(city))
             } yield ()
-            Ok(addOutput)
+            Ok(result)
         }
 
       override def insertCityMany: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "add-city-many" =>
-            val addOutput = for {
+            val result = for {
               cities <- req.decodeJson
               _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMany(cities))
             } yield ()
-            Ok(addOutput)
+            Ok(result)
+        }
+
+      override def getAll: HttpRoutes[F] =
+        HttpRoutes.of[F] {
+          case GET -> Root / "get-all" =>
+            val result = for {
+              cities <- session.map(CommandService.impl[F](_)).use(s => s.selectAll)
+            } yield cities.asJson
+            Ok(result)
         }
     }
 }
