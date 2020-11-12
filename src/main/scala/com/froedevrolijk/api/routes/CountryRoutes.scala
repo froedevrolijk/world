@@ -3,7 +3,7 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.Async
 import com.froedevrolijk.api.db.datamodels.QueryCountry
-import com.froedevrolijk.api.db.query.CountryService
+import com.froedevrolijk.api.service.CountryService
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s.circe._

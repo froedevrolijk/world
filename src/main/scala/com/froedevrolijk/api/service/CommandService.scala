@@ -1,4 +1,4 @@
-package com.froedevrolijk.api.db.command
+package com.froedevrolijk.api.service
 
 import cats.effect.Sync
 import cats.implicits._

@@ -2,8 +2,8 @@ package com.froedevrolijk.api.routes
 
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
-import com.froedevrolijk.api.db.command.CommandService
 import com.froedevrolijk.api.db.datamodels.{ Cities, City }
+import com.froedevrolijk.api.service.CommandService
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
 import io.circe.generic.auto._

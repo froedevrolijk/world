@@ -2,7 +2,7 @@ package com.froedevrolijk.api.server
 
 import cats.effect.{ ConcurrentEffect, ContextShift, Timer }
 import com.froedevrolijk.api.config.{ AppConfig, ServerStoreConfig }
-import com.froedevrolijk.api.db.query.Combinator
+import com.froedevrolijk.api.service.ServiceCombinator
 import net.ceedubs.ficus.Ficus.{ toFicusConfig, _ }
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import org.http4s.dsl.Http4sDsl
@@ -30,7 +30,7 @@ object HttpServer {
           appConfig: AppConfig
       ): F[Unit] = {
 
-        val routes = Combinator.impl[F].apiRoutesCombinator.orNotFound
+        val routes = ServiceCombinator.impl[F].apiRoutesCombinator.orNotFound
 
         BlazeServerBuilder[F](ConcurrentEffect[F], Timer[F])
           .withHttpApp(routes)

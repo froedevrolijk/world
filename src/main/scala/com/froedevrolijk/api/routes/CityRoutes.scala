@@ -3,7 +3,7 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ContextShift, Timer }
 import com.froedevrolijk.api.db.datamodels.QueryCity
-import com.froedevrolijk.api.db.query.CityService
+import com.froedevrolijk.api.service.CityService
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s.circe._

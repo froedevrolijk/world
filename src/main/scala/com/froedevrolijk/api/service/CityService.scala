@@ -1,8 +1,8 @@
-package com.froedevrolijk.api.db.query
+package com.froedevrolijk.api.service
 
 import cats.effect.Sync
 import com.froedevrolijk.api.db.datamodels.{ CityName, QueryCity }
-import com.froedevrolijk.api.db.query.DBQueries._
+import com.froedevrolijk.api.db.queries.DBQueries._
 import skunk.Session
 
 trait CityService[F[_]] {
