@@ -22,11 +22,7 @@ trait Combinator[F[_]] {
 
   def commandService: CommandService[F]
 
-  def commandRoute: HttpRoutes[F]
-
-  def commandRoute2: HttpRoutes[F]
-
-  def commandRoute3: HttpRoutes[F]
+  def commandApi: HttpRoutes[F]
 
   def apiRoutesCombinator: HttpRoutes[F]
 
@@ -50,28 +46,21 @@ object Combinator {
         HealthRoute.impl[F].healthRoute
 
       override def cityRoutes: HttpRoutes[F] =
-        CityRoutes.impl[F](cityService).getCities
+        CityRoutes.impl[F](cityService).cityQueries
 
       override def countryRoute: HttpRoutes[F] =
-        CountryRoutes.impl[F](countryService).getCountries
+        CountryRoutes.impl[F](countryService).countryQueries
 
       override def commandService: CommandService[F] =
         CommandService.impl(S)
 
-      override def commandRoute: HttpRoutes[F] =
-        CommandRoutes.impl[F].insertCitySingle
-
-      override def commandRoute2: HttpRoutes[F] =
-        CommandRoutes.impl[F].insertCityMany
-
-      override def commandRoute3: HttpRoutes[F] =
-        CommandRoutes.impl[F].getAll
+      override def commandApi: HttpRoutes[F] =
+        CommandRoutes.impl[F].cityCommands
 
       override def apiRoutesCombinator: HttpRoutes[F] = {
-        val routes = List(healthRouteApi, countryRoute, cityRoutes, commandRoute, commandRoute2, commandRoute3)
+        val routes = List(healthRouteApi, countryRoute, cityRoutes, commandApi)
         routes.foldLeft(HttpRoutes.empty[F])(_ <+> _)
       }
-
     }
 
 }

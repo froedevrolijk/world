@@ -6,15 +6,13 @@ import com.froedevrolijk.api.db.datamodels.QueryCountry
 import com.froedevrolijk.api.db.query.CountryService
 import io.circe.generic.auto._
 import io.circe.syntax._
-import org.http4s.{ HttpRoutes, _ }
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
+import org.http4s.{ HttpRoutes, _ }
 
 trait CountryRoutes[F[_]] extends Http4sDsl[F] {
 
-  def getCountries: HttpRoutes[F]
-
-  //  def postCountries: HttpRoutes[F]
+  def countryQueries: HttpRoutes[F]
 }
 
 object CountryRoutes {
@@ -24,7 +22,7 @@ object CountryRoutes {
 
       implicit val decoder: EntityDecoder[F, QueryCountry] = jsonOf[F, QueryCountry]
 
-      override def getCountries: HttpRoutes[F] =
+      override def countryQueries: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "countries" =>
             val countriesOutput = for {
@@ -33,7 +31,5 @@ object CountryRoutes {
             } yield countries.asJson
             Ok(countriesOutput)
         }
-
-      //    override def postCountries: HttpRoutes[F] = ???
     }
 }

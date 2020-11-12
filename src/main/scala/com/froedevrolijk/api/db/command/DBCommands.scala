@@ -1,10 +1,9 @@
 package com.froedevrolijk.api.db.command
 
-import cats.effect.{ IO, Resource }
 import com.froedevrolijk.api.db.datamodels.City
 import skunk.codec.all.{ varchar, _ }
 import skunk.implicits._
-import skunk.{ Command, Query, Session, Void }
+import skunk.{ Command, Query, Void }
 
 object DBCommands {
 

@@ -12,7 +12,7 @@ import org.http4s.{ HttpRoutes, _ }
 
 trait CityRoutes[F[_]] extends Http4sDsl[F] {
 
-  def getCities: HttpRoutes[F]
+  def cityQueries: HttpRoutes[F]
 
 }
 
@@ -23,7 +23,7 @@ object CityRoutes {
 
       implicit val decoder: EntityDecoder[F, QueryCity] = jsonOf[F, QueryCity]
 
-      override def getCities: HttpRoutes[F] =
+      override def cityQueries: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "cities" =>
             val citiesOutput = for {
