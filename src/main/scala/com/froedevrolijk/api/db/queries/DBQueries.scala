@@ -2,7 +2,8 @@ package com.froedevrolijk.api.db.queries
 
 import com.froedevrolijk.api.db.datamodels.{ CityName, Country }
 import skunk.Query
-import skunk.codec.all.{ bpchar, text, varchar }
+import skunk.codec.all.{ bpchar, text, varchar, _ }
+import skunk.implicits._
 
 object DBQueries {
 
