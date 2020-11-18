@@ -1,7 +1,7 @@
 package com.froedevrolijk.api.server
 
 import cats.effect.{ ConcurrentEffect, ContextShift, Sync, Timer }
-import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig, ServerStoreConfig }
+import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig }
 import com.froedevrolijk.api.service.ServiceCombinator
 import net.ceedubs.ficus.Ficus.{ toFicusConfig, _ }
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
@@ -15,7 +15,6 @@ import scala.concurrent.ExecutionContext
 
 trait HttpServer[F[_]] extends KleisliSyntax with Http4sDsl[F] {
   def server(
-      serverConfig: ServerStoreConfig,
       appConfig: AppConfig,
       serverDebugConfig: ServerDebugConfig
   ): F[Unit]
@@ -28,7 +27,6 @@ object HttpServer {
     new HttpServer[F] {
 
       override def server(
-          serverStoreConfig: ServerStoreConfig,
           appConfig: AppConfig,
           serverDebugConfig: ServerDebugConfig
       ): F[Unit] = {

@@ -1,7 +1,7 @@
 package com.froedevrolijk.api
 
 import cats.effect.{ ConcurrentEffect, ContextShift, ExitCode, IO, IOApp, Sync, Timer }
-import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig, ServerStoreConfig }
+import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig }
 import com.froedevrolijk.api.server.HttpServer
 import com.froedevrolijk.api.session.RunSession
 import com.froedevrolijk.api.utils.Log
@@ -25,12 +25,11 @@ object Main extends IOApp with Log {
     resources.use { r =>
       implicit val session: Session[F] = r
 
-      val serverStoreConfig = ConfigFactory.load().getConfig("store").as[ServerStoreConfig]
       val appConfig         = ConfigFactory.load().getConfig("api").as[AppConfig]
       val serverDebugConfig = ConfigFactory.load().getConfig("serverDebugConfig").as[ServerDebugConfig]
       val api = HttpServer
         .impl[F]
-        .server(serverConfig = serverStoreConfig, appConfig = appConfig, serverDebugConfig)
+        .server(appConfig = appConfig, serverDebugConfig)
       api
     }
 
