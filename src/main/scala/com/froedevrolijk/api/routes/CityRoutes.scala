@@ -4,7 +4,7 @@ import cats.ApplicativeError
 import cats.FlatMap.ops._
 import cats.data.OptionT
 import cats.effect.{ Async, ContextShift, Sync, Timer }
-import com.froedevrolijk.api.db.datamodels.QueryCity
+import com.froedevrolijk.api.db.datamodels.{ CityName, QueryCity }
 import com.froedevrolijk.api.exception.{ CityNotFoundException, EmptyRequest }
 import com.froedevrolijk.api.service.CityService
 import io.circe.generic.auto._
@@ -29,15 +29,14 @@ object CityRoutes {
     new CityRoutes[F] {
 
       implicit val decoder: EntityDecoder[F, QueryCity] = jsonOf[F, QueryCity]
-//      implicit val decoder2: EntityDecoder[F, String]   = jsonOf[F, String]
 
       override def cityQueries: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "cities" =>
             val citiesOutput = for {
-              queryCity <- req.as[QueryCity]
-              request2  <- filterEmptyRequestBody(queryCity.city)
-              cities    <- queryCityService.findCitiesPerCountry(request2)
+              requestCountryCode  <- req.as[QueryCity]
+              filteredCountryCode <- filterEmptyRequestBody(requestCountryCode.countryCode)
+              cities              <- queryCityService.findCitiesPerCountry(filteredCountryCode)
             } yield cities.asJson
             Ok(citiesOutput)
         }
@@ -47,7 +46,6 @@ object CityRoutes {
         else F.pure[String](s)
 
     }
-
 }
 
 // TODO
