@@ -1,5 +1,6 @@
 package com.froedevrolijk.api.routes
 
+import cats.ApplicativeError
 import cats.FlatMap.ops._
 import cats.data.OptionT
 import cats.effect.{ Async, ContextShift, Sync, Timer }
@@ -28,16 +29,22 @@ object CityRoutes {
     new CityRoutes[F] {
 
       implicit val decoder: EntityDecoder[F, QueryCity] = jsonOf[F, QueryCity]
+//      implicit val decoder2: EntityDecoder[F, String]   = jsonOf[F, String]
 
       override def cityQueries: HttpRoutes[F] =
         HttpRoutes.of[F] {
           case req @ POST -> Root / "cities" =>
             val citiesOutput = for {
-              request <- req.as[QueryCity]
-              cities  <- queryCityService.findCitiesPerCountry(request.city)
+              queryCity <- req.as[QueryCity]
+              request2  <- filterEmptyRequestBody(queryCity.city)
+              cities    <- queryCityService.findCitiesPerCountry(request2)
             } yield cities.asJson
             Ok(citiesOutput)
         }
+
+      def filterEmptyRequestBody(s: String): F[String] =
+        if (s == null || s.trim.isEmpty) F.raiseError[String](EmptyRequest("request body was empty"))
+        else F.pure[String](s)
 
     }
 
@@ -55,3 +62,7 @@ object CityRoutes {
 //            } yield cities.asJson
 //            Ok(citiesOutput)
 //        }
+
+//      def filterEmptyRequestBody[T](s: String): Option[String] =
+//        if (s == null || s.trim.isEmpty) None
+//        else Some(s)

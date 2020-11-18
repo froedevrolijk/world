@@ -20,14 +20,11 @@ object CityService {
 
   def impl[F[_]: Sync](implicit S: Session[F]): CityService[F] =
     new CityService[F] {
+      override def findCitiesPerCountry(args: String): F[List[CityName]] =
+        S.prepare(cities).use(_.stream(args, 32).compile.toList)
+      // check if user sent a value. if yes, send this query to the service; if not, return a response saying that a value should be provided
 
-      override def findCitiesPerCountry(args: String): F[List[CityName]] = {
-        val result = S.prepare(cities).use(_.stream(args, 32).compile.toList)
-        result
-        // check if user sent a value. if yes, send this query to the service; if not, return a response saying that a value should be provided
-
-        // check if there are cities for users' query. if yes, send back the list; if not, return a response saying there are no values for the users' query
-      }
+      // check if there are cities for users' query. if yes, send back the list; if not, return a response saying there are no values for the users' query
 
     }
 
