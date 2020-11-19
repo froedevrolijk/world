@@ -164,6 +164,7 @@ export default {
         population: this.population,
       });
       console.log(formData);
+      this.clear();
 
       // let config = {
       //   headers: {
