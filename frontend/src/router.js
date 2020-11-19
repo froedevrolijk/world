@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import ShowCities from './components/ShowCities'
 import AddCities from './components/AddCities'
-import SignIn from './components/SignIn'
-import SignUp from './components/SignUp'
 
 Vue.use(Router)
 
@@ -12,7 +10,7 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/',
+            path: '/showcities',
             name: 'showcities',
             component: ShowCities
         },
@@ -20,16 +18,6 @@ export default new Router({
             path: '/addcities',
             name: 'addcities',
             component: AddCities
-        },
-        {
-            path: '/signin',
-            name: 'signin',
-            component: SignIn
-        },
-        {
-            path: '/signup',
-            name: 'signup',
-            component: SignUp
-          }
+        }
     ]
 })

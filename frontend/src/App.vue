@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import Toolbar from './components/Toolbar'
+import Header from './components/Header'
 import Footer from './components/Footer'
 
 export default {
   name: "App",
   components: {
-    'app-header': Toolbar,
+    'app-header': Header,
     'app-footer': Footer
   },
   data() {

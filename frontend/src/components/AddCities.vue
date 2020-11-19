@@ -8,7 +8,7 @@
               >Add City</v-list-item-title
             >
             <v-list-item-subtitle
-              >Add your city to the database by filling out the information
+              >Add your City to the database by filling out the information
               below</v-list-item-subtitle
             >
           </v-list-item-content>
@@ -23,14 +23,14 @@
             <v-layout wrap>
               <v-flex xs12>
                 <v-text-field
-                  v-model="city"
-                  :error-messages="cityErrors"
-                  :counter="10"
-                  label="City name"
+                  v-model="name"
+                  :error-messages="nameErrors"
+                  :counter="20"
+                  label="City"
                   required
                   color="teal"
-                  @input="$v.city.$touch()"
-                  @blur="$v.city.$touch()"
+                  @input="$v.name.$touch()"
+                  @blur="$v.name.$touch()"
                 ></v-text-field>
 
                 <v-select
@@ -43,6 +43,17 @@
                   @change="$v.select.$touch()"
                   @blur="$v.select.$touch()"
                 ></v-select>
+
+                <v-text-field
+                  v-model="population"
+                  :error-messages="populationErrors"
+                  label="Population"
+                  required
+                  color="teal"
+                  type="number"
+                  @change="$v.population.$touch()"
+                  @blur="$v.population.$touch()"
+                ></v-text-field>
 
                 <v-btn
                   class="ma-0"
@@ -77,13 +88,14 @@ export default {
   mixins: [validationMixin],
 
   validations: {
-    city: { required, maxLength: maxLength(10) },
+    name: { required, maxLength: maxLength(20) },
     items: { required },
     select: { required },
+    population: { required },
   },
 
   data: () => ({
-    city: "",
+    name: "",
     items: [
       "Drenthe",
       "Flevoland",
@@ -99,30 +111,33 @@ export default {
       "Zuid-Holland",
     ],
     select: null,
+    population: null,
     snackbar: false,
   }),
 
   computed: {
     formIsValid() {
-      return (
-        this.city &&
-        this.items &&
-        this.select
-      )
+      return this.name && this.items && this.select && this.population;
     },
 
-    cityErrors() {
+    nameErrors() {
       const errors = [];
-      if (!this.$v.city.$dirty) return errors;
-      !this.$v.city.maxLength &&
-        errors.push("First name must be at most 10 characters long");
-      !this.$v.city.required && errors.push("First name is required.");
+      if (!this.$v.name.$dirty) return errors;
+      !this.$v.name.maxLength &&
+        errors.push("City name must be at most 20 characters long");
+      !this.$v.name.required && errors.push("City name is required.");
       return errors;
     },
     selectErrors() {
       const errors = [];
       if (!this.$v.items.$dirty) return errors;
       !this.$v.items.required && errors.push("District is required");
+      return errors;
+    },
+    populationErrors() {
+      const errors = [];
+      if (!this.$v.population.$dirty) return errors;
+      !this.$v.population.required && errors.push("Population is required");
       return errors;
     },
   },
@@ -134,13 +149,16 @@ export default {
     },
     clear() {
       this.$v.$reset();
-      this.city = "";
-      (this.select = null);
+      this.name = "";
+      this.select = null;
+      this.population = null;
     },
     onSubmit() {
       const formData = JSON.stringify({
-        city: this.city,
+        name: this.name,
         district: this.select,
+        countryCode: "NLD",
+        population: this.population,
       });
       console.log(formData);
 
