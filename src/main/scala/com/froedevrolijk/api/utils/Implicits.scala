@@ -1,9 +1,9 @@
 package com.froedevrolijk.api.utils
 
+import cats.FlatMap.ops._
 import cats.data.OptionT
 import cats.effect.Sync
 import com.froedevrolijk.api.exception.EmptyRequest
-import cats.FlatMap.ops._
 
 trait Implicits {
 

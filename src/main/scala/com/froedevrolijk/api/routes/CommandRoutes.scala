@@ -22,9 +22,7 @@ trait CommandRoutes[F[_]] extends Http4sDsl[F] {
 
 object CommandRoutes {
 
-  def impl[F[_]: Sync: Async: ContextShift: ConcurrentEffect: Timer]
-//      commandService: CommandService[F]
-      : CommandRoutes[F] =
+  def impl[F[_]: Sync: Async: ContextShift: ConcurrentEffect: Timer]: CommandRoutes[F] =
     new CommandRoutes[F] {
 
       implicit val cityDecoder: EntityDecoder[F, City] = jsonOf[F, City]

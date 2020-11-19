@@ -5,16 +5,14 @@ import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig }
 import com.froedevrolijk.api.service.ServiceCombinator
 import net.ceedubs.ficus.Ficus.{ toFicusConfig, _ }
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
-import org.http4s.Header
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.server.middleware._
 import org.http4s.syntax.KleisliSyntax
 import skunk.Session
-import org.http4s.server.middleware.Logger
-import org.http4s.server.middleware._
-import scala.concurrent.duration._
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
 
 trait HttpServer[F[_]] extends KleisliSyntax with Http4sDsl[F] {
   def server(

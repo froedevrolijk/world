@@ -10,13 +10,13 @@ import skunk.Session
 
 trait ServiceCombinator[F[_]] {
 
-  def healthRouteApi: HttpRoutes[F] //HealthRoute[F]
+  def healthRouteApi: HttpRoutes[F]
 
   def cityService: CityService[F]
   def cityRoutes: HttpRoutes[F]
 
   def countryService: CountryService[F]
-  def countryRoute: HttpRoutes[F] // CountryRoutes[F]
+  def countryRoute: HttpRoutes[F]
 
   def commandService: CommandService[F]
   def commandApi: HttpRoutes[F]
