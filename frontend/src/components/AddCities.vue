@@ -8,7 +8,7 @@
               >Add City</v-list-item-title
             >
             <v-list-item-subtitle
-              >Add your City to the database by filling out the information
+              >Add your city to the database by filling out the information
               below</v-list-item-subtitle
             >
           </v-list-item-content>
@@ -84,6 +84,8 @@ import axios from "axios";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
 
+const instance = axios.create({ baseURL: "http://localhost:8086" });
+
 export default {
   mixins: [validationMixin],
 
@@ -155,26 +157,37 @@ export default {
     },
     onSubmit() {
       const formData = JSON.stringify({
+        id: "1",
         name: this.name,
-        district: this.select,
         countryCode: "NLD",
+        district: this.select,
         population: this.population,
       });
       console.log(formData);
 
-      let config = {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Allow-Headers":
-            "Authorization, Content-Type, X-Requested-With",
-          "Content-Type": "application/json",
-        },
-      };
+      // let config = {
+      //   headers: {
+      //     "Access-Control-Allow-Origin": "*",
+      //     "Access-Control-Allow-Credentials": "true",
+      //     "Access-Control-Allow-Headers":
+      //       "Authorization, Content-Type, X-Requested-With",
+      //     "Content-Type": "application/json",
+      //   },
+      // };
 
-      axios
-        .post(`/addpet`, formData, config)
-        .then((res) => console.log(res))
+      instance
+        .post(`/add-city-single`, formData)
+        .then((res) => {
+          console.log(res);
+          const data = res.data;
+          const cities = [];
+          for (let key in data) {
+            // can also use this instead of code below: cities.push(data[key])
+            const user = data[key];
+            user.id = key;
+            cities.push(user);
+          }
+        })
         .catch((err) => console.log(err));
     },
   },
