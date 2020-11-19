@@ -5,11 +5,14 @@ import com.froedevrolijk.api.config.{ AppConfig, ServerDebugConfig }
 import com.froedevrolijk.api.service.ServiceCombinator
 import net.ceedubs.ficus.Ficus.{ toFicusConfig, _ }
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
+import org.http4s.Header
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.syntax.KleisliSyntax
 import skunk.Session
 import org.http4s.server.middleware.Logger
+import org.http4s.server.middleware._
+import scala.concurrent.duration._
 
 import scala.concurrent.ExecutionContext
 
@@ -31,18 +34,28 @@ object HttpServer {
           serverDebugConfig: ServerDebugConfig
       ): F[Unit] = {
 
-        val logAction: Option[String => F[Unit]] =
-          if (serverDebugConfig.logAction) None
-          else Some(_ => F.unit)
+//        val logAction: Option[String => F[Unit]] =
+//          if (serverDebugConfig.logAction) None
+//          else Some(_ => F.unit)
+//
+//        val corsRoutes = Logger.httpApp(
+//          logHeaders = serverDebugConfig.header,
+//          logBody = serverDebugConfig.body,
+//          logAction = logAction
+//        )
 
-        val routes = Logger.httpApp(
-          logHeaders = serverDebugConfig.header,
-          logBody = serverDebugConfig.body,
-          logAction = logAction
-        )(ServiceCombinator.impl[F].apiRoutesCombinator.orNotFound)
+        val methodConfig = CORSConfig(
+          anyOrigin = true,
+          anyMethod = false,
+          allowedMethods = Some(Set("GET", "POST")),
+          allowCredentials = true,
+          maxAge = 1.day.toSeconds
+        )
+
+        val corsRoutes = CORS(ServiceCombinator.impl[F].apiRoutesCombinator.orNotFound, config = methodConfig)
 
         BlazeServerBuilder[F](ConcurrentEffect[F], Timer[F])
-          .withHttpApp(routes)
+          .withHttpApp(corsRoutes)
           .bindHttp(appConfig.port, appConfig.address)
           .withExecutionContext(ExecutionContext.global)
       }.serve.compile.drain

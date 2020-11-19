@@ -24,7 +24,7 @@ object CityService {
       override def findCitiesPerCountry(args: String): F[List[CityName]] =
         S.prepare(cities)
           .use(_.stream(args, 32).compile.toList)
-          .flatMap(x => filterEmptyDatabaseResponse(x))
+//          .flatMap(x => filterEmptyDatabaseResponse(x))
 
 //      def filterEmptyDatabaseResponse(cities: List[CityName]): Either[Throwable, List[CityName]] =
 //        cities match {
@@ -32,11 +32,11 @@ object CityService {
 //          case x   => Right(x)
 //        }
 
-      def filterEmptyDatabaseResponse[T](s: List[CityName]): F[T] =
-        s match {
-          case Nil => F.raiseError[T](CityNotFoundException("city was not found"))
-          case x   => F.pure[T](x)
-        }
+//      def filterEmptyDatabaseResponse[T](s: List[CityName]): F[T] =
+//        s match {
+//          case Nil => F.raiseError[T](CityNotFoundException("city was not found"))
+//          case x   => F.pure[T](x)
+//        }
 
     }
 

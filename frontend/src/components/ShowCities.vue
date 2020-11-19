@@ -15,7 +15,7 @@
             color="teal"
           ></v-text-field>
         </v-card-title>
-        <v-data-table :headers="headers" :items="users" :search="search">
+        <v-data-table :headers="headers" :items="cities" :search="search">
           <template v-slot:items="props">
             <td class="text-xs-left">{{ props.item.id }}</td>
             <td class="text-xs-left">{{ props.item.name }}</td>
@@ -24,16 +24,15 @@
             <td class="text-xs-left">{{ props.item.population }}</td>
           </template>
           <template v-slot:no-results>
-            <v-alert
-              :value="true"
-              color="error"
-              icon="warning"
-            >Your search for "{{ search }}" found no results.</v-alert>
+            <v-alert :value="true" color="error" icon="warning"
+              >Your search for "{{ search }}" found no results.</v-alert
+            >
           </template>
         </v-data-table>
-        <!-- <div class="text-xs-center">
-      <v-btn @click="getCities" outline color="teal">Get Cities</v-btn>
-        </div>-->
+        <!-- 
+        <div class="text-xs-center">
+          <v-btn @click="getCities" color="teal">Get Cities</v-btn>
+        </div> -->
       </v-card>
     </v-flex>
   </v-layout>
@@ -41,6 +40,8 @@
 
 <script>
 import axios from "axios";
+
+const instance = axios.create({ baseURL: "http://localhost:8086" });
 
 export default {
   data() {
@@ -53,34 +54,34 @@ export default {
         { text: "District", value: "district" },
         { text: "Population", value: "population" },
       ],
-      users: []
+      cities: [],
     };
   },
   mounted() {
-    axios.get("/cities").then(response => {
-      this.users = response.data;
+    instance.get("/get-all").then((response) => {
+      this.cities = response.data;
     });
   },
   methods: {
     getCities() {
       axios
         .get("/cities")
-        .then(res => {
+        .then((res) => {
           console.log(res);
           const data = res.data;
-          const users = [];
+          const cities = [];
           for (let key in data) {
-            // can also use this instead of code below: users.push(data[key])
+            // can also use this instead of code below: cities.push(data[key])
             const user = data[key];
             user.id = key;
-            users.push(user);
+            cities.push(user);
           }
-          //   console.log("USERS", users);
-          //   this.firstName = users[0].firstName;
-          //   this.lastName = users[0].lastName;
+          //   console.log("cities", cities);
+          //   this.firstName = cities[0].firstName;
+          //   this.lastName = cities[0].lastName;
         })
-        .catch(err => console.log(err));
-    }
-  }
+        .catch((err) => console.log(err));
+    },
+  },
 };
 </script>
