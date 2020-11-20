@@ -16,7 +16,6 @@ object CityService {
     new CityService[F] {
 
       override def findCitiesPerCountry(args: String): F[List[CityName]] =
-        S.prepare(cities)
-          .use(_.stream(args, 32).compile.toList)
+        S.prepare(cities).use(_.stream(args, 32).compile.toList)
     }
 }
