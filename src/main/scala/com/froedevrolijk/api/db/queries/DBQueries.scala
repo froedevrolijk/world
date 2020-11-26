@@ -13,7 +13,9 @@ object DBQueries {
     FROM    city
     WHERE   countrycode like $text
     LIMIT   10
-    """.query(varchar).gmap[CityName]
+    """
+      .query(varchar)
+      .gmap[CityName]
 
   val countries: Query[String, Country] =
     sql"""
