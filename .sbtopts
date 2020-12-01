@@ -6,4 +6,3 @@
 -Djavax.net.ssl.trustStorePassword=changeit
 -Dmaven.wagon.http.ssl.insecure=true
 -Dsbt.gigahorse=false
--Dsbt.repository.secure=false

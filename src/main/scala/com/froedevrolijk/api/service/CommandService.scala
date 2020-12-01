@@ -4,9 +4,12 @@ import cats.effect.Sync
 import cats.implicits._
 import com.froedevrolijk.api.db.command.DBCommands.{ all, insertMultiple, insertOne }
 import com.froedevrolijk.api.db.datamodels.{ Cities, City }
+import com.froedevrolijk.api.utils.Log
 import skunk.Session
+//import cats.Functor.ops.toAllFunctorOps
+import cats.syntax.applicativeError._
 
-trait CommandService[F[_]] {
+trait CommandService[F[_]] extends Log {
 
   def insertSingle(city: City): F[Unit]
 
