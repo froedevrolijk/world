@@ -6,18 +6,6 @@ import skunk.{ PreparedQuery, Query, Session }
 
 object RunQueryLogic {
 
-//  def runQuery2[F, A, B](q: Query[A, B])(implicit S: Session[F]): Resource[F, PreparedQuery[F, A, B]] =
-//    S.prepare(q)
-
-//  def runQuery[F[_], T, A, B](pq: Query[A, B], args: A)(implicit S: Session[F], F: Sync[F]): F[List[B]] =
-//    S.prepare(pq).use(_.stream(args, 32).compile.toList)
-//
-//  def runQuery2[F[_]](pq: Query[String, Country], args: QueryCountry)(implicit
-//      S: Session[F],
-//      F: Sync[F]
-//  ): F[List[Country]] =
-//    S.prepare(pq).use(_.stream(args.country, 32).compile.toList)
-
   /**
    * Parameterized function to run queries from the database.
    * @param pq PreparedQuery in Skunk
