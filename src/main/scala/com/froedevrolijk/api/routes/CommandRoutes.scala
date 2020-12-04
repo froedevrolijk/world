@@ -22,7 +22,9 @@ trait CommandRoutes[F[_]] extends Http4sDsl[F] {
 
 object CommandRoutes {
 
-  def impl[F[_]: Sync: Async: ContextShift: ConcurrentEffect: Timer]: CommandRoutes[F] =
+  def impl[F[_]: Sync: Async: ContextShift: ConcurrentEffect: Timer](
+      commandService: CommandService[F]
+  ): CommandRoutes[F] =
     new CommandRoutes[F] {
 
       implicit val cityDecoder: EntityDecoder[F, City] = jsonOf[F, City]
@@ -38,17 +40,26 @@ object CommandRoutes {
           case req @ POST -> Root / "add-city-single" =>
             val result = for {
               city <- req.as[City]
-              _    <- session.map(CommandService.impl[F](_)).use(s => s.insertSingleCity(city))
+              _    <- commandService.insertSingleCity(city)
+              //session.map(CommandService.impl[F](_)).use(s => s.insertSingleCity(city))
             } yield ()
             Ok(result)
 
-          case req @ POST -> Root / "add-city-many" =>
-            val result = for {
-              cities <- req.decodeJson
-              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMultipleCities(cities))
-            } yield ()
-            Ok(result)
+          //          case req @ POST -> Root / "add-city-many" =>
+          //            val result = for {
+          //              cities <- req.decodeJson
+          //              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMultipleCities(cities))
+          //            } yield ()
+          //            Ok(result)
+          case DELETE -> Root / "delete-city-single" / IntVar(cityId) =>
+            commandService
+              .deleteSingleCity(cityId)
+              .flatMap(_ => Ok("City deleted"))
 
+          case DELETE -> Root / "delete-country-single" / countryCode =>
+            commandService
+              .deleteSingleCountry(countryCode)
+              .flatMap(_ => Ok("Country deleted"))
         }
     }
 }

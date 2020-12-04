@@ -1,8 +1,8 @@
 package com.froedevrolijk.api.service
 
-import cats.effect.{ Resource, Sync }
-import com.froedevrolijk.api.db.datamodels.{ Country, QueryCountry }
-import skunk.{ PreparedQuery, Query, Session }
+import cats.Functor.ops.toAllFunctorOps
+import cats.effect.Sync
+import skunk.{ Command, Query, Session }
 
 object RunQueryLogic {
 
@@ -20,5 +20,11 @@ object RunQueryLogic {
       F: Sync[F]
   ): F[List[B]] =
     S.prepare(pq).use(_.stream(inputType, chunkSize).compile.toList)
+
+  def runCommand[F[_], A](ps: Command[A], inputType: A)(implicit
+      S: Session[F],
+      F: Sync[F]
+  ): F[Unit] =
+    S.prepare(ps).use(_.execute(inputType)).void
 
 }

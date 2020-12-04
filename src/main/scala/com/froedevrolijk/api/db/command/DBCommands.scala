@@ -20,13 +20,13 @@ object DBCommands {
     VALUES ($int4, $varchar, $bpchar, $varchar, $int4)
     """.command.gcontramap[City]
 
-  def insertMultipleCitiesStmt(ps: List[City]): Command[ps.type] = {
-    val enc = (int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4).gcontramap[City].values.list(ps)
-    sql"""
-    INSERT INTO city 
-    VALUES $enc
-    """.command
-  }
+//  def insertMultipleCitiesStmt(ps: List[City]): Command[ps.type] = {
+//    val enc = (int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4).gcontramap[City].values.list(ps)
+//    sql"""
+//    INSERT INTO city
+//    VALUES $enc
+//    """.command
+//  }
 
   val updateCityPopulationStmt: Command[UpdateCityPopulation] =
     sql"""
@@ -44,21 +44,21 @@ object DBCommands {
     """.command
       .gcontramap[UpdateCountryPopulation]
 
-  val deleteSingleCityStmt: Command[String] =
+  val deleteSingleCityStmt: Command[Int] =
     sql"""
     DELETE FROM city
-    WHERE name = $varchar
+    WHERE id = $int4
     """.command
 
   val deleteSingleCountryStmt: Command[String] =
     sql"""
     DELETE FROM country
-    WHERE name = $varchar
+    WHERE name = ${bpchar(3)}
     """.command
 
-  def deleteManyStmt(n: Int): Command[List[String]] =
-    sql"""
-    DELETE FROM country
-    WHERE name IN (${varchar.list(n)})
-    """.command
+//  def deleteManyStmt(n: Int): Command[List[String]] =
+//    sql"""
+//    DELETE FROM country
+//    WHERE name IN (${varchar.list(n)})
+//    """.command
 }

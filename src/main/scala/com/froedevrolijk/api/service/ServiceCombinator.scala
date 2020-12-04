@@ -16,10 +16,10 @@ trait ServiceCombinator[F[_]] {
   def cityRoutes: HttpRoutes[F]
 
   def countryService: CountryService[F]
-  def countryRoute: HttpRoutes[F]
+  def countryRoutes: HttpRoutes[F]
 
   def commandService: CommandService[F]
-  def commandApi: HttpRoutes[F]
+  def commandRoutes: HttpRoutes[F]
 
   def apiRoutesCombinator: HttpRoutes[F]
 }
@@ -44,17 +44,17 @@ object ServiceCombinator {
       override def countryService: CountryService[F] =
         CountryService.impl[F]
 
-      override def countryRoute: HttpRoutes[F] =
+      override def countryRoutes: HttpRoutes[F] =
         CountryRoutes.impl[F](countryService).countryQueries
 
       override def commandService: CommandService[F] =
-        CommandService.impl(S)
+        CommandService.impl[F]
 
-      override def commandApi: HttpRoutes[F] =
-        CommandRoutes.impl[F].cityCommands
+      override def commandRoutes: HttpRoutes[F] =
+        CommandRoutes.impl[F](commandService).cityCommands
 
       override def apiRoutesCombinator: HttpRoutes[F] = {
-        val routes = List(healthRouteApi, countryRoute, cityRoutes, commandApi)
+        val routes = List(healthRouteApi, countryRoutes, cityRoutes, commandRoutes)
         routes.foldLeft(HttpRoutes.empty[F])(_ <+> _)
       }
     }
