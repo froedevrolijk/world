@@ -1,6 +1,6 @@
 package com.froedevrolijk.api.db.command
 
-import com.froedevrolijk.api.db.datamodels.{ City, CityName, UpdateCityPopulation, UpdateCountryPopulation }
+import com.froedevrolijk.api.db.datamodels.{ City, CityName, UpdateCity, UpdateCityPopulation, UpdateCountryPopulation }
 import skunk.codec.all.{ varchar, _ }
 import skunk.{ Command, Query, Void }
 import cats.effect._
@@ -8,6 +8,7 @@ import skunk._
 import skunk.implicits._
 import skunk.codec.all._
 import java.time.OffsetDateTime
+
 import natchez.Trace.Implicits.noop
 import fs2.Stream
 import cats.Applicative
@@ -28,15 +29,18 @@ object DBCommands {
 //    """.command
 //  }
 
-  val updateCityPopulationStmt: Command[UpdateCityPopulation] =
+  val updateCityStmt: Command[UpdateCity] =
     sql"""
     UPDATE city
-    SET population = $int4
-    WHERE name = $varchar
+    SET name = $varchar,
+        countrycode = ${bpchar(3)},
+        district = $varchar,
+        population = $int4
+    WHERE id = $int4
     """.command
-      .gcontramap[UpdateCityPopulation]
+      .gcontramap[UpdateCity]
 
-  val updateCountryPopulationStmt: Command[UpdateCountryPopulation] =
+  val updateCountryStmt: Command[UpdateCountryPopulation] =
     sql"""
     UPDATE country
     SET population = $int4

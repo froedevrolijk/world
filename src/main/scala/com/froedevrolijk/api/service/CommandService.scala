@@ -16,8 +16,8 @@ trait CommandService[F[_]] extends Log with MonadTransformers[F] {
   def insertSingleCity(city: City): F[Unit]
 //  def insertMultipleCities(cs: Cities): F[Unit]
 
-//  def updateCityPopulation(args: UpdateCityPopulation): F[Unit]
-//  def updateCountryPopulation(args: UpdateCountryPopulation): F[Unit]
+  def updateCityPopulation(args: UpdateCity): F[Unit]
+  def updateCountryPopulation(args: UpdateCountryPopulation): F[Unit]
 
   def deleteSingleCity(id: Int): F[Unit]
   def deleteSingleCountry(code: String): F[Unit]
@@ -35,7 +35,9 @@ object CommandService {
 //      override def insertMultipleCities(cs: Cities): F[Unit] =
 //        runCommand(insertMultipleCitiesStmt(cs.cities), cs)
 
-//      override def updateCityPopulation(args: UpdateCityPopulation): DBResult[City] = ???
+      override def updateCityPopulation(args: UpdateCity): F[Unit] =
+        runCommand(updateCityStmt, args)
+
 //        for {
 //          city        <- checkIfCityExists(args.city)
 //          _           <- checkCanBeUpdated(city)
@@ -44,8 +46,8 @@ object CommandService {
 
 //        S.prepare(updateCityPopulationStmt).use(_.execute(args).void)
 
-//      override def updateCountryPopulation(args: UpdateCountryPopulation): F[Unit] =
-//        S.prepare(updateCountryPopulationStmt).use(_.execute(args).void)
+      override def updateCountryPopulation(args: UpdateCountryPopulation): F[Unit] =
+        runCommand(updateCountryStmt, args)
 
       override def deleteSingleCity(id: Int): F[Unit] =
         runCommand(deleteSingleCityStmt, id)

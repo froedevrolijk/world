@@ -2,7 +2,7 @@ package com.froedevrolijk.api.routes
 
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
-import com.froedevrolijk.api.db.datamodels.{ Cities, City }
+import com.froedevrolijk.api.db.datamodels.{ Cities, City, UpdateCity }
 import com.froedevrolijk.api.service.{ CityService, CommandService }
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
@@ -27,8 +27,9 @@ object CommandRoutes {
   ): CommandRoutes[F] =
     new CommandRoutes[F] {
 
-      implicit val cityDecoder: EntityDecoder[F, City] = jsonOf[F, City]
-      implicit val decodeCityList: Decoder[Cities]     = deriveDecoder[Cities]
+      implicit val cityDecoder: EntityDecoder[F, City]             = jsonOf[F, City]
+      implicit val updateCityDecoder: EntityDecoder[F, UpdateCity] = jsonOf[F, UpdateCity]
+      implicit val decodeCityList: Decoder[Cities]                 = deriveDecoder[Cities]
 
       def session: Resource[F, Session[F]] =
         for {
@@ -51,6 +52,13 @@ object CommandRoutes {
           //              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMultipleCities(cities))
           //            } yield ()
           //            Ok(result)
+          case req @ PUT -> Root / "update-city" =>
+            val result = for {
+              updatedCity <- req.as[UpdateCity]
+              _           <- commandService.updateCityPopulation(updatedCity)
+            } yield ()
+            Ok(result)
+
           case DELETE -> Root / "delete-city-single" / IntVar(cityId) =>
             commandService
               .deleteSingleCity(cityId)
