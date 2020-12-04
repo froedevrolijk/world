@@ -24,6 +24,7 @@ object CityRoutes {
     new CityRoutes[F] {
 
       implicit val decoder: EntityDecoder[F, QueryCity] = jsonOf[F, QueryCity]
+//      implicit val decoder2: EntityDecoder[F, CityName] = jsonOf[F, CityName]
 
       override def cityQueries: HttpRoutes[F] =
         HttpRoutes.of[F] {
@@ -34,7 +35,19 @@ object CityRoutes {
               cities              <- queryCityService.findCitiesPerCountry(filteredCountryCode)
             } yield cities.asJson
             Ok(citiesOutput)
+
+          case GET -> Root / "get-all" =>
+            val result = for {
+              cities <- queryCityService.selectAllCities
+            } yield cities.asJson
+            Ok(result)
         }
+
+      //          case req @ PUT -> Root / "cities" =>
+      //          val citiesOutput = for {
+      //          name <- req.as[CityName]
+      //
+      //          }
 
       def filterEmptyRequestBody(s: String): F[String] =
         if (s == null || s.trim.isEmpty) F.raiseError[String](EmptyRequest("request body was empty"))

@@ -3,7 +3,7 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
 import com.froedevrolijk.api.db.datamodels.{ Cities, City }
-import com.froedevrolijk.api.service.CommandService
+import com.froedevrolijk.api.service.{ CityService, CommandService }
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
 import io.circe.generic.auto._
@@ -38,22 +38,17 @@ object CommandRoutes {
           case req @ POST -> Root / "add-city-single" =>
             val result = for {
               city <- req.as[City]
-              _    <- session.map(CommandService.impl[F](_)).use(s => s.insertSingle(city))
+              _    <- session.map(CommandService.impl[F](_)).use(s => s.insertSingleCity(city))
             } yield ()
             Ok(result)
 
           case req @ POST -> Root / "add-city-many" =>
             val result = for {
               cities <- req.decodeJson
-              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMany(cities))
+              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMultipleCities(cities))
             } yield ()
             Ok(result)
 
-          case GET -> Root / "get-all" =>
-            val result = for {
-              cities <- session.map(CommandService.impl[F](_)).use(s => s.selectAll)
-            } yield cities.asJson
-            Ok(result)
         }
     }
 }

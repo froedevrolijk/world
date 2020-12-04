@@ -27,7 +27,7 @@ object CountryRoutes {
           case req @ POST -> Root / "countries" =>
             val countriesOutput = for {
               request   <- req.as[QueryCountry]
-              countries <- queryCountryService.findCountriesByName(request)
+              countries <- queryCountryService.findCountriesByName(request.country)
             } yield countries.asJson
             Ok(countriesOutput)
         }
