@@ -62,12 +62,12 @@ object CommandRoutes {
           case DELETE -> Root / "delete-city-single" / IntVar(cityId) =>
             commandService
               .deleteSingleCity(cityId)
-              .flatMap(_ => Ok("City deleted"))
+              .flatMap(_ => Ok())
 
           case DELETE -> Root / "delete-country-single" / countryCode =>
             commandService
               .deleteSingleCountry(countryCode)
-              .flatMap(_ => Ok("Country deleted"))
+              .flatMap(_ => Ok())
         }
     }
 }

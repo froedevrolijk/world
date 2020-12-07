@@ -57,7 +57,7 @@ object DBCommands {
   val deleteSingleCountryStmt: Command[String] =
     sql"""
     DELETE FROM country
-    WHERE name = ${bpchar(3)}
+    WHERE code = ${bpchar(3)}
     """.command
 
 //  def deleteManyStmt(n: Int): Command[List[String]] =
