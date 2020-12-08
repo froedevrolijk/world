@@ -57,7 +57,7 @@ object CommandRoutes {
               updatedCity <- req.as[UpdateCity]
               _           <- commandService.updateCityPopulation(updatedCity)
             } yield ()
-            Ok(result)
+            Ok()
 
           case DELETE -> Root / "delete-city-single" / IntVar(cityId) =>
             commandService
