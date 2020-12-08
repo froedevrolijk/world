@@ -36,9 +36,9 @@ object CityRoutes {
             } yield cities.asJson
             Ok(citiesOutput)
 
-          case GET -> Root / "get-all" =>
+          case GET -> Root / "get-all-cities" =>
             val result = for {
-              cities <- queryCityService.selectAllCities
+              cities <- queryCityService.getAllCities
             } yield cities.asJson
             Ok(result)
         }

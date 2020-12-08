@@ -38,7 +38,7 @@ object CommandRoutes {
 
       override def cityCommands: HttpRoutes[F] =
         HttpRoutes.of[F] {
-          case req @ POST -> Root / "add-city-single" =>
+          case req @ POST -> Root / "add-city" =>
             val result = for {
               city <- req.as[City]
               _    <- commandService.insertSingleCity(city)
@@ -60,12 +60,12 @@ object CommandRoutes {
             } yield ()
             Ok()
 
-          case DELETE -> Root / "delete-city-single" / IntVar(cityId) =>
+          case DELETE -> Root / "delete-city" / IntVar(cityId) =>
             commandService
               .deleteSingleCity(cityId)
               .flatMap(_ => Ok())
 
-          case DELETE -> Root / "delete-country-single" / countryCode =>
+          case DELETE -> Root / "delete-country" / countryCode =>
             commandService
               .deleteSingleCountry(countryCode)
               .flatMap(_ => Ok())

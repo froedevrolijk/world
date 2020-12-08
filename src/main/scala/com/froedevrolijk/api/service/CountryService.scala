@@ -9,6 +9,8 @@ import skunk.Session
 trait CountryService[F[_]] {
 
   def findCountriesByName(args: String): F[List[Country]]
+
+  def getAllCountries: F[List[Country]]
 }
 
 object CountryService {
@@ -19,5 +21,7 @@ object CountryService {
       override def findCountriesByName(args: String): F[List[Country]] =
         runQuery(countriesStmt, args)
 
+      override def getAllCountries: F[List[Country]] =
+        S.execute(selectAllCountriesStmt)
     }
 }

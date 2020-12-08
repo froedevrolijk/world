@@ -42,4 +42,12 @@ object DBQueries {
     """
       .query(int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4)
       .gmap[City]
+
+  val selectAllCountriesStmt: Query[Void, Country] =
+    sql"""
+    SELECT name, code, population
+    FROM country
+    """
+      .query(varchar ~ varchar ~ int4)
+      .gmap[Country]
 }

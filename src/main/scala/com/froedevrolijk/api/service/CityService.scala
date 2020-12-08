@@ -18,9 +18,9 @@ trait CityService[F[_]] extends Log with MonadTransformers[F] {
   // F[Either[MyError, List[CityName]]]  // F[List[CityName]]
   //      F[Either[MyError, List[CityName]]] === EitherT[F, MyError, A]
 
-  def selectAllCityNames(args: String): F[List[CityName]]
+  def getAllCityNames(args: String): F[List[CityName]]
 
-  def selectAllCities: F[List[City]]
+  def getAllCities: F[List[City]]
 }
 
 object CityService {
@@ -35,10 +35,10 @@ object CityService {
       //          case Nil => logger.info("There are no values for this request")
       //          case _   =>
       //        }
-      override def selectAllCityNames(args: String): F[List[CityName]] =
+      override def getAllCityNames(args: String): F[List[CityName]] =
         runQuery(selectAllCityNamesStmt, args)
 
-      override def selectAllCities: F[List[City]] =
+      override def getAllCities: F[List[City]] =
         S.execute(selectAllCitiesStmt)
 
     }

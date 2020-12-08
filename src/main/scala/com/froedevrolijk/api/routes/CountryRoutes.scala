@@ -30,6 +30,12 @@ object CountryRoutes {
               countries <- queryCountryService.findCountriesByName(request.country)
             } yield countries.asJson
             Ok(countriesOutput)
+
+          case GET -> Root / "get-all-countries" =>
+            val result = for {
+              cities <- queryCountryService.getAllCountries
+            } yield cities.asJson
+            Ok(result)
         }
     }
 }
