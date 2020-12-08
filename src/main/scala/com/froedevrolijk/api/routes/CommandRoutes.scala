@@ -2,15 +2,14 @@ package com.froedevrolijk.api.routes
 
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
-import com.froedevrolijk.api.db.datamodels.{ Cities, City, UpdateCity }
-import com.froedevrolijk.api.service.{ CityService, CommandService }
+import com.froedevrolijk.api.db.datamodels.{ Cities, City, UpdateCity, UpdateCountry }
+import com.froedevrolijk.api.service.CommandService
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.deriveDecoder
-import io.circe.syntax.EncoderOps
 import natchez.Trace.Implicits.noop
-import org.http4s.circe.{ jsonEncoder, jsonOf, toMessageSynax }
+import org.http4s.circe.jsonOf
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{ EntityDecoder, HttpRoutes }
 import skunk.Session
@@ -27,9 +26,10 @@ object CommandRoutes {
   ): CommandRoutes[F] =
     new CommandRoutes[F] {
 
-      implicit val cityDecoder: EntityDecoder[F, City]             = jsonOf[F, City]
-      implicit val updateCityDecoder: EntityDecoder[F, UpdateCity] = jsonOf[F, UpdateCity]
-      implicit val decodeCityList: Decoder[Cities]                 = deriveDecoder[Cities]
+      implicit val cityDecoder: EntityDecoder[F, City]                   = jsonOf[F, City]
+      implicit val updateCityDecoder: EntityDecoder[F, UpdateCity]       = jsonOf[F, UpdateCity]
+      implicit val updateCountryDecoder: EntityDecoder[F, UpdateCountry] = jsonOf[F, UpdateCountry]
+      implicit val decodeCityList: Decoder[Cities]                       = deriveDecoder[Cities]
 
       def session: Resource[F, Session[F]] =
         for {
@@ -46,16 +46,17 @@ object CommandRoutes {
             } yield ()
             Ok(result)
 
-          //          case req @ POST -> Root / "add-city-many" =>
-          //            val result = for {
-          //              cities <- req.decodeJson
-          //              _      <- session.map(CommandService.impl[F](_)).use(s => s.insertMultipleCities(cities))
-          //            } yield ()
-          //            Ok(result)
           case req @ PUT -> Root / "update-city" =>
             val result = for {
               updatedCity <- req.as[UpdateCity]
               _           <- commandService.updateCityPopulation(updatedCity)
+            } yield ()
+            Ok(result)
+
+          case req @ PUT -> Root / "update-country" =>
+            for {
+              updatedCountry <- req.as[UpdateCountry]
+              _              <- commandService.updateCountryPopulation(updatedCountry)
             } yield ()
             Ok()
 

@@ -1,17 +1,9 @@
 package com.froedevrolijk.api.db.command
 
-import com.froedevrolijk.api.db.datamodels.{ City, CityName, UpdateCity, UpdateCityPopulation, UpdateCountryPopulation }
+import com.froedevrolijk.api.db.datamodels.{ City, UpdateCity, UpdateCountry }
+import skunk.Command
 import skunk.codec.all.{ varchar, _ }
-import skunk.{ Command, Query, Void }
-import cats.effect._
-import skunk._
 import skunk.implicits._
-import skunk.codec.all._
-import java.time.OffsetDateTime
-
-import natchez.Trace.Implicits.noop
-import fs2.Stream
-import cats.Applicative
 
 object DBCommands {
 
@@ -20,14 +12,6 @@ object DBCommands {
     INSERT INTO city 
     VALUES ($int4, $varchar, $bpchar, $varchar, $int4)
     """.command.gcontramap[City]
-
-//  def insertMultipleCitiesStmt(ps: List[City]): Command[ps.type] = {
-//    val enc = (int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4).gcontramap[City].values.list(ps)
-//    sql"""
-//    INSERT INTO city
-//    VALUES $enc
-//    """.command
-//  }
 
   val updateCityStmt: Command[UpdateCity] =
     sql"""
@@ -40,13 +24,22 @@ object DBCommands {
     """.command
       .gcontramap[UpdateCity]
 
-  val updateCountryStmt: Command[UpdateCountryPopulation] =
+  val updateCountryStmt: Command[UpdateCountry] =
     sql"""
     UPDATE country
-    SET population = $int4
-    WHERE name = $varchar
+    SET name = $varchar,
+        continent = $varchar,
+        region = $varchar,
+        surfacearea = $float4,
+        indepyear = $int2,
+        population = $int4,
+        lifeexpectancy = $float4,
+        gnp = $float4,
+        governmentform = $varchar,
+        headofstate = $varchar
+    WHERE code = ${bpchar(3)}
     """.command
-      .gcontramap[UpdateCountryPopulation]
+      .gcontramap[UpdateCountry]
 
   val deleteSingleCityStmt: Command[Int] =
     sql"""
@@ -59,10 +52,4 @@ object DBCommands {
     DELETE FROM country
     WHERE code = ${bpchar(3)}
     """.command
-
-//  def deleteManyStmt(n: Int): Command[List[String]] =
-//    sql"""
-//    DELETE FROM country
-//    WHERE name IN (${varchar.list(n)})
-//    """.command
 }
