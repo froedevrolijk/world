@@ -5,7 +5,7 @@
         <v-data-table
           :headers="headers"
           :items="countries"
-          sort-by="calories"
+          sort-by="name"
           class="elevation-1"
         >
           <template v-slot:top>
@@ -14,7 +14,7 @@
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on, attrs }">
+                <!-- <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     dark
@@ -24,11 +24,11 @@
                   >
                     New Item
                   </v-btn>
-                </template>
+                </template> -->
                 <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
-                  </v-card-title>
+                  <!-- <v-card-title> -->
+                  <!-- <span class="headline">{{ formTitle }}</span> -->
+                  <!-- </v-card-title> -->
 
                   <v-card-text>
                     <v-container>
@@ -41,26 +41,56 @@
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
-                            v-model="editedItem.calories"
-                            label="Calories"
+                            v-model="editedItem.continent"
+                            label="Continent"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
-                            v-model="editedItem.fat"
-                            label="Fat (g)"
+                            v-model="editedItem.region"
+                            label="Region"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
-                            v-model="editedItem.carbs"
-                            label="Carbs (g)"
+                            v-model="editedItem.surfaceArea"
+                            label="Surface area"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
-                            v-model="editedItem.protein"
-                            label="Protein (g)"
+                            v-model="editedItem.independenceYear"
+                            label="Independence year"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.population"
+                            label="Population"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.lifeExpectancy"
+                            label="Life expectancy"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.gnp"
+                            label="GNP"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.governmentForm"
+                            label="Government form"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.headOfState"
+                            label="Head of state"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -113,6 +143,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
+const instance = axios.create({ baseURL: "http://localhost:8086" });
+
 export default {
   data: () => ({
     dialog: false,
@@ -140,24 +174,34 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      continent: "",
+      region: "",
+      surfaceArea: 0,
+      independenceYear: 0,
+      population: 0,
+      lifeExpectancy: 0,
+      gnp: 0,
+      governmentForm: "",
+      headOfState: "",
     },
     defaultItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      continent: "",
+      region: "",
+      surfaceArea: 0,
+      independenceYear: 0,
+      population: 0,
+      lifeExpectancy: 0,
+      gnp: 0,
+      governmentForm: "",
+      headOfState: "",
     },
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+    //     formTitle() {
+    //       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    //     },
   },
 
   watch: {
@@ -171,6 +215,12 @@ export default {
 
   created() {
     this.initialize();
+  },
+
+  mounted() {
+    instance.get("/get-all-cities").then((response) => {
+      this.cities = response.data;
+    });
   },
 
   methods: {
@@ -198,7 +248,7 @@ export default {
           independenceYear: 1912,
           population: 3401200,
           lifeExpectancy: 71.6,
-          gnp: 3205.00,
+          gnp: 3205.0,
           governmentForm: "Republic",
           headOfState: "Rexhep Mejdani",
         },
@@ -245,6 +295,41 @@ export default {
         this.countries.push(this.editedItem);
       }
       this.close();
+    },
+
+    updateCountry() {
+      const formData = JSON.stringify({
+        code: this.code,
+        name: this.name,
+        continent: this.continent,
+        region: this.region,
+        surfaceArea: this.surfaceArea,
+        independenceYear: this.independenceYear,
+        population: this.population,
+        lifeExpectancy: this.lifeExpectancy,
+        gnp: this.gnp,
+        governmentForm: this.governmentForm,
+        headOfState: this.headOfState,
+      });
+      console.log(formData);
+
+      instance
+        .put("/update-country", formData)
+        .then((res) => {
+          console.log(res);
+          const data = res.data;
+          const countries = [];
+          for (let key in data) {
+            countries.push(data[key]);
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+
+    deleteCountry(countryId) {
+      instance.delete("/delete-country" / countryId).then((res) => {
+        console.log(res);
+      });
     },
   },
 };

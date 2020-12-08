@@ -1,9 +1,9 @@
 package com.froedevrolijk.api.db.queries
 
-import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country }
-import skunk.{ Query, Void }
+import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country, Country2, CountryFull }
 import skunk.codec.all.{ bpchar, text, varchar, _ }
 import skunk.implicits._
+import skunk.{ Query, Void }
 
 object DBQueries {
 
@@ -43,11 +43,13 @@ object DBQueries {
       .query(int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4)
       .gmap[City]
 
-  val selectAllCountriesStmt: Query[Void, Country] =
+  // , name, continent, region, surfacearea, indepyear, population, lifeexpectancy, gnp, governmentform, headofstate
+  //  ~ varchar ~ varchar ~ varchar ~ float4 ~ int2 ~ int4 ~ float4 ~ float4 ~ varchar ~ varchar
+  val selectAllCountriesStmt: Query[Void, Country2] =
     sql"""
-    SELECT name, code, population
+    SELECT code
     FROM country
     """
-      .query(varchar ~ varchar ~ int4)
-      .gmap[Country]
+      .query(bpchar(3))
+      .gmap[Country2]
 }

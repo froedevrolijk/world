@@ -8,7 +8,7 @@ object CORSConf {
   val methodConfig: CORSConfig = CORSConfig(
     anyOrigin = true,
     anyMethod = false,
-    allowedMethods = Some(Set("GET", "POST")),
+    allowedMethods = Some(Set("GET", "POST", "PUT", "DELETE")),
     allowCredentials = true,
     maxAge = 1.day.toSeconds
   )

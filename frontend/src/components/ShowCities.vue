@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    instance.get("/get-all").then((response) => {
+    instance.get("/get-all-cities").then((response) => {
       this.cities = response.data;
     });
   },

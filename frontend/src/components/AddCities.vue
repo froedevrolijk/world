@@ -177,7 +177,7 @@ export default {
       // };
 
       instance
-        .post(`/add-city-single`, formData)
+        .post(`/add-city`, formData)
         .then((res) => {
           console.log(res);
           const data = res.data;
