@@ -1,7 +1,7 @@
 package com.froedevrolijk.api.db.queries
 
-import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country, Country2, CountryFull }
-import skunk.codec.all.{ bpchar, text, varchar, _ }
+import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country, SmallCountry }
+import skunk.codec.all.{ bpchar, numeric, text, varchar, _ }
 import skunk.implicits._
 import skunk.{ Query, Void }
 
@@ -17,14 +17,14 @@ object DBQueries {
       .query(varchar)
       .gmap[CityName]
 
-  val countriesStmt: Query[String, Country] =
+  val countriesStmt: Query[String, SmallCountry] =
     sql"""
       SELECT name, code, population
       FROM   country
       WHERE  name like $text
     """
       .query(varchar ~ bpchar(3) ~ int4)
-      .gmap[Country]
+      .gmap[SmallCountry]
 
   val selectAllCityNamesStmt: Query[String, CityName] =
     sql"""
@@ -37,19 +37,21 @@ object DBQueries {
 
   val selectAllCitiesStmt: Query[Void, City] =
     sql"""
-    SELECT id, name, countrycode, district, population 
+    SELECT id, name, countrycode, district, population
     FROM city
     """
       .query(int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4)
       .gmap[City]
 
-  // , name, continent, region, surfacearea, indepyear, population, lifeexpectancy, gnp, governmentform, headofstate
-  //  ~ varchar ~ varchar ~ varchar ~ float4 ~ int2 ~ int4 ~ float4 ~ float4 ~ varchar ~ varchar
-  val selectAllCountriesStmt: Query[Void, Country2] =
+  val selectAllCountriesStmt: Query[Void, Country] =
     sql"""
-    SELECT code
-    FROM country
+      SELECT code, name, continent, region, surfacearea, COALESCE(indepyear, 0) as indepyear,
+       population, gnp, governmentform, COALESCE(headofstate, 'unknown') as headofstate
+      FROM   country
     """
-      .query(bpchar(3))
-      .gmap[Country2]
+      .query(
+        bpchar(3) ~ varchar ~ varchar ~ varchar ~ numeric(10, 2) ~ int4
+        ~ int4 ~ numeric(10, 2) ~ varchar ~ varchar
+      )
+      .gmap[Country]
 }

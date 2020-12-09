@@ -1,6 +1,7 @@
 package com.froedevrolijk.api.server
 
 import org.http4s.server.middleware.CORSConfig
+
 import scala.concurrent.duration.DurationInt
 
 object CORSConf {

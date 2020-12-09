@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS country (
     name varchar NOT NULL,
     continent varchar NOT NULL,
     region varchar NOT NULL,
-    surfacearea real NOT NULL,
-    indepyear smallint,
+    surfacearea numeric(10,2), -- real NOT NULL
+    indepyear integer,
     population integer NOT NULL,
-    lifeexpectancy real,
+    lifeexpectancy numeric(8, 6), -- real
     gnp numeric(10,2), -- (precision, scale) The precision of a numeric is the number of digits to both sides of the decimal point. The scale of a numeric is the count of decimal digits in the fractional part, to the right of the decimal point
     gnpold numeric(10,2),
     localname varchar NOT NULL,

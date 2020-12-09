@@ -13,7 +13,6 @@ import org.http4s.syntax.KleisliSyntax
 import skunk.Session
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
 
 trait HttpServer[F[_]] extends KleisliSyntax with Http4sDsl[F] {
   def server(

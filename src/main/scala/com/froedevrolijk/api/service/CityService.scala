@@ -3,14 +3,9 @@ package com.froedevrolijk.api.service
 import cats.effect.Sync
 import com.froedevrolijk.api.db.datamodels.{ City, CityName }
 import com.froedevrolijk.api.db.queries.DBQueries._
+import com.froedevrolijk.api.service.RunQueryLogic.runQuery
 import com.froedevrolijk.api.utils.Log
 import skunk.Session
-import cats.Functor.ops.toAllFunctorOps
-import cats.syntax.applicativeError._
-import cats.FlatMap.ops._
-import cats.data.EitherT
-import com.froedevrolijk.api.exception.MyError
-import com.froedevrolijk.api.service.RunQueryLogic.runQuery
 
 trait CityService[F[_]] extends Log with MonadTransformers[F] {
 

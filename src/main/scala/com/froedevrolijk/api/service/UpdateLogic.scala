@@ -1,6 +1,6 @@
 package com.froedevrolijk.api.service
 
-import com.froedevrolijk.api.db.datamodels.{ City, CityName }
+import com.froedevrolijk.api.db.datamodels.City
 
 trait UpdateLogic[F[_]] extends MonadTransformers[F] {
 
