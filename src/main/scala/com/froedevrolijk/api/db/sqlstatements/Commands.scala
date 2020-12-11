@@ -1,27 +1,16 @@
-package com.froedevrolijk.api.db.command
+package com.froedevrolijk.api.db.sqlstatements
 
-import com.froedevrolijk.api.db.datamodels.{
-  City,
-  CityName,
-  Country,
-  RowExists,
-  SmallCountry,
-  UpdateCity,
-  UpdateCountry
-}
-import skunk.{ Command, Query }
-import skunk.codec.all.{ varchar, _ }
+import com.froedevrolijk.api.db.datamodels.{ City, UpdateCity, UpdateCountry }
+import skunk.Command
+import skunk.codec.all.{ bpchar, varchar, _ }
 import skunk.implicits._
-import skunk.codec.all.{ bpchar, numeric, text, varchar, _ }
-import skunk.implicits._
-import skunk.{ Query, Void }
 
-object DBCommands {
+object Commands {
 
   val insertSingleCityStmt: Command[City] =
     sql"""
-    INSERT INTO city 
-    VALUES ($int4, $varchar, $bpchar, $varchar, $int4)
+    INSERT INTO city(name, countrycode, district, population)
+    VALUES ($varchar, $bpchar, $varchar, $int4)
     """.command.gcontramap[City]
 
   val updateCityStmt: Command[UpdateCity] =
@@ -31,7 +20,7 @@ object DBCommands {
         countrycode = ${bpchar(3)},
         district = $varchar,
         population = $int4
-    WHERE id = $int4
+    WHERE cityid = $uuid
     """.command
       .gcontramap[UpdateCity]
 

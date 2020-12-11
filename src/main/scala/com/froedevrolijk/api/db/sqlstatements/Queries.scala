@@ -1,11 +1,11 @@
-package com.froedevrolijk.api.db.queries
+package com.froedevrolijk.api.db.sqlstatements
 
 import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country, SmallCountry }
-import skunk.codec.all.{ bpchar, numeric, text, varchar, _ }
+import skunk.codec.all.{ bpchar, int4, numeric, text, varchar }
 import skunk.implicits._
 import skunk.{ Query, Void }
 
-object DBQueries {
+object Queries {
 
   val citiesStmt: Query[String, CityName] =
     sql"""
@@ -37,10 +37,10 @@ object DBQueries {
 
   val selectAllCitiesStmt: Query[Void, City] =
     sql"""
-    SELECT id, name, countrycode, district, population
+    SELECT name, countrycode, district, population
     FROM city
     """
-      .query(int4 ~ varchar ~ bpchar(3) ~ varchar ~ int4)
+      .query(varchar ~ bpchar(3) ~ varchar ~ int4)
       .gmap[City]
 
   val selectAllCountriesStmt: Query[Void, Country] =

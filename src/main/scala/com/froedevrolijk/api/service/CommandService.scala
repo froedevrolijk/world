@@ -2,7 +2,7 @@ package com.froedevrolijk.api.service
 
 import cats.Applicative
 import cats.effect.Sync
-import com.froedevrolijk.api.db.command.DBCommands._
+import com.froedevrolijk.api.db.sqlstatements.Commands._
 import com.froedevrolijk.api.db.datamodels._
 import com.froedevrolijk.api.service.RunQueryLogic.{ runCommandDelete, runCommandInsert, runCommandUpdate }
 import com.froedevrolijk.api.utils.Log
