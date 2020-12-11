@@ -3,7 +3,7 @@ package com.froedevrolijk.api.utils
 import cats.FlatMap.ops._
 import cats.data.OptionT
 import cats.effect.Sync
-import com.froedevrolijk.api.exception.EmptyRequest
+import com.froedevrolijk.api.exception.EmptyRequestException
 
 trait Implicits {
 
@@ -12,7 +12,7 @@ trait Implicits {
     def orNotFound(implicit F: Sync[F]): F[T] =
       optionT.value.flatMap {
         case Some(v) => F.pure[T](v)
-        case None    => F.raiseError[T](EmptyRequest("empty request"))
+        case None    => F.raiseError[T](EmptyRequestException("empty request"))
       }
   }
 

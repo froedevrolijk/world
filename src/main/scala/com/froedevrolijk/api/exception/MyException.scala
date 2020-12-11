@@ -8,4 +8,12 @@ case class CityNotFoundException(override val message: String) extends MyExcepti
 
 case class CountryNotFoundException(override val message: String) extends MyException(message) with NoStackTrace
 
-case class EmptyRequest(override val message: String) extends MyException(message) with NoStackTrace
+case class EmptyRequestException(override val message: String) extends MyException(message) with NoStackTrace
+
+case class EmptyRowException(override val message: String) extends MyException(message) with NoStackTrace
+
+case class CannotUpdateException(override val message: String) extends MyException(message) with NoStackTrace
+
+case class CannotInsertException(override val message: String) extends MyException(message) with NoStackTrace
+
+case class CannotSelectException(override val message: String) extends MyException(message) with NoStackTrace

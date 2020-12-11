@@ -49,26 +49,26 @@ object CommandRoutes {
           case req @ PUT -> Root / "update-city" =>
             val result = for {
               updatedCity <- req.as[UpdateCity]
-              _           <- commandService.updateCityPopulation(updatedCity)
+              _           <- commandService.updateCity(updatedCity)
             } yield ()
             Ok(result)
 
           case req @ PUT -> Root / "update-country" =>
-            for {
+            val result = for {
               updatedCountry <- req.as[UpdateCountry]
-              _              <- commandService.updateCountryPopulation(updatedCountry)
+              _              <- commandService.updateCountry(updatedCountry)
             } yield ()
-            Ok()
+            Ok(result)
 
           case DELETE -> Root / "delete-city" / IntVar(cityId) =>
             commandService
-              .deleteSingleCity(cityId)
+              .deleteCity(cityId)
               .flatMap(_ => Ok())
 
           case DELETE -> Root / "delete-country" / countryCode =>
             commandService
-              .deleteSingleCountry(countryCode)
-              .flatMap(_ => Ok())
+              .deleteCountry(countryCode)
+              .flatMap(_ => Ok()) // code, exception encoded
         }
     }
 }

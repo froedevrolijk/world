@@ -3,7 +3,7 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ContextShift, Sync, Timer }
 import com.froedevrolijk.api.db.datamodels.QueryCity
-import com.froedevrolijk.api.exception.EmptyRequest
+import com.froedevrolijk.api.exception.EmptyRequestException
 import com.froedevrolijk.api.service.CityService
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -50,7 +50,7 @@ object CityRoutes {
       //          }
 
       def filterEmptyRequestBody(s: String): F[String] =
-        if (s == null || s.trim.isEmpty) F.raiseError[String](EmptyRequest("request body was empty"))
+        if (s == null || s.trim.isEmpty) F.raiseError[String](EmptyRequestException("request body was empty"))
         else F.pure[String](s)
     }
 }

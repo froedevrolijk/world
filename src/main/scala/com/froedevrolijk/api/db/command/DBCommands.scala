@@ -1,9 +1,20 @@
 package com.froedevrolijk.api.db.command
 
-import com.froedevrolijk.api.db.datamodels.{ City, UpdateCity, UpdateCountry }
-import skunk.Command
+import com.froedevrolijk.api.db.datamodels.{
+  City,
+  CityName,
+  Country,
+  RowExists,
+  SmallCountry,
+  UpdateCity,
+  UpdateCountry
+}
+import skunk.{ Command, Query }
 import skunk.codec.all.{ varchar, _ }
 import skunk.implicits._
+import skunk.codec.all.{ bpchar, numeric, text, varchar, _ }
+import skunk.implicits._
+import skunk.{ Query, Void }
 
 object DBCommands {
 
@@ -41,13 +52,14 @@ object DBCommands {
     """.command
       .gcontramap[UpdateCountry]
 
-  val deleteSingleCityStmt: Command[Int] =
+  val deleteCityStmt: Command[Int] =
     sql"""
     DELETE FROM city
     WHERE id = $int4
     """.command
+  //  WHERE EXISTS (SELECT 1 FROM city WHERE id = $int4)
 
-  val deleteSingleCountryStmt: Command[String] =
+  val deleteCountryStmt: Command[String] =
     sql"""
     DELETE FROM country
     WHERE code = ${bpchar(3)}
