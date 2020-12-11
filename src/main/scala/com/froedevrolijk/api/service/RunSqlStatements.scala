@@ -2,24 +2,19 @@ package com.froedevrolijk.api.service
 
 import cats.FlatMap.ops._
 import cats.effect.Sync
-import com.froedevrolijk.api.exception.{
-  CannotInsertException,
-  CannotSelectException,
-  CannotUpdateException,
-  EmptyRowException
-}
-import skunk.{ Command, Query, Session }
+import com.froedevrolijk.api.exception.{ CannotInsertException, CannotUpdateException, EmptyRowException }
 import skunk.data.Completion._
+import skunk.{ Command, Query, Session }
 
-object RunQueryLogic {
+trait RunSqlStatements[F[_]] {
 
-  def runQuery[F[_], A, B](pq: Query[A, B], inputType: A, chunkSize: Int = 32)(implicit
+  def runQuery[A, B](pq: Query[A, B], inputType: A, chunkSize: Int = 32)(implicit
       S: Session[F],
       F: Sync[F]
   ): F[List[B]] =
     S.prepare(pq).use(_.stream(inputType, chunkSize).compile.toList)
 
-  def runCommandDelete[F[_], A](ps: Command[A], inputType: A)(implicit
+  def runCommandDelete[A](ps: Command[A], inputType: A)(implicit
       S: Session[F],
       F: Sync[F]
   ): F[Unit] =
@@ -30,7 +25,7 @@ object RunQueryLogic {
         case c         => F.pure(println(c))
       })
 
-  def runCommandUpdate[F[_], A](ps: Command[A], inputType: A)(implicit
+  def runCommandUpdate[A](ps: Command[A], inputType: A)(implicit
       S: Session[F],
       F: Sync[F]
   ): F[Unit] =
@@ -41,7 +36,7 @@ object RunQueryLogic {
         case c                     => F.pure(println(c))
       })
 
-  def runCommandInsert[F[_], A](ps: Command[A], inputType: A)(implicit
+  def runCommandInsert[A](ps: Command[A], inputType: A)(implicit
       S: Session[F],
       F: Sync[F]
   ): F[Unit] =

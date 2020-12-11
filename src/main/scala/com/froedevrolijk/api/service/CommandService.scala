@@ -1,15 +1,16 @@
 package com.froedevrolijk.api.service
 
+import java.util.UUID
+
 import cats.Applicative
 import cats.effect.Sync
-import com.froedevrolijk.api.db.sqlstatements.Commands._
 import com.froedevrolijk.api.db.datamodels._
-import com.froedevrolijk.api.service.RunQueryLogic.{ runCommandDelete, runCommandInsert, runCommandUpdate }
+import com.froedevrolijk.api.db.sqlstatements.Commands._
 import com.froedevrolijk.api.utils.Log
 import skunk.Session
 //import cats.Functor.ops.toAllFunctorOps
 
-trait CommandService[F[_]] extends Log {
+trait CommandService[F[_]] extends Log with RunSqlStatements[F] {
 
   def insertSingleCity(city: City): F[Unit]
 //  def insertMultipleCities(cs: Cities): F[Unit]
@@ -17,8 +18,8 @@ trait CommandService[F[_]] extends Log {
   def updateCity(args: UpdateCity): F[Unit]
   def updateCountry(args: UpdateCountry): F[Unit]
 
-  def deleteCity(id: Int): F[Unit]
-  def deleteCountry(code: String): F[Unit]
+  def deleteCity(id: UUID): F[Unit]
+  def deleteCountry(code: UUID): F[Unit]
 
 }
 
@@ -60,10 +61,10 @@ object CommandService {
       override def updateCountry(args: UpdateCountry): F[Unit] =
         runCommandUpdate(updateCountryStmt, args)
 
-      override def deleteCity(id: Int): F[Unit] =
+      override def deleteCity(id: UUID): F[Unit] =
         runCommandDelete(deleteCityStmt, id)
 
-      override def deleteCountry(code: String): F[Unit] =
+      override def deleteCountry(code: UUID): F[Unit] =
         runCommandDelete(deleteCountryStmt, code)
     }
 }

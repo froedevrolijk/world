@@ -3,18 +3,10 @@ package com.froedevrolijk.api.service
 import cats.effect.Sync
 import com.froedevrolijk.api.db.datamodels.{ City, CityName }
 import com.froedevrolijk.api.db.sqlstatements.Queries._
-import com.froedevrolijk.api.service.RunQueryLogic.runQuery
 import com.froedevrolijk.api.utils.Log
 import skunk.Session
 
-import cats.effect._
-import skunk._
-import skunk.implicits._
-import skunk.codec.all._
-import java.time.OffsetDateTime
-import natchez.Trace.Implicits.noop
-
-trait CityService[F[_]] extends Log with MonadTransformers[F] {
+trait CityService[F[_]] extends Log with RunSqlStatements[F] {
 
   def findCitiesPerCountry(args: String): F[List[CityName]]
   // F[Either[MyError, List[CityName]]]  // F[List[CityName]]

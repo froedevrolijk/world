@@ -60,12 +60,12 @@ object CommandRoutes {
             } yield ()
             Ok(result)
 
-          case DELETE -> Root / "delete-city" / IntVar(cityId) =>
+          case DELETE -> Root / "delete-city" / UUIDVar(cityId) =>
             commandService
               .deleteCity(cityId)
               .flatMap(_ => Ok())
 
-          case DELETE -> Root / "delete-country" / countryCode =>
+          case DELETE -> Root / "delete-country" / UUIDVar(countryCode) =>
             commandService
               .deleteCountry(countryCode)
               .flatMap(_ => Ok()) // code, exception encoded

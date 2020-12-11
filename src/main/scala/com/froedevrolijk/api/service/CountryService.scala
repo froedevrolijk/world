@@ -3,10 +3,9 @@ package com.froedevrolijk.api.service
 import cats.effect.Sync
 import com.froedevrolijk.api.db.datamodels.{ Country, SmallCountry }
 import com.froedevrolijk.api.db.sqlstatements.Queries._
-import com.froedevrolijk.api.service.RunQueryLogic.runQuery
 import skunk.Session
 
-trait CountryService[F[_]] {
+trait CountryService[F[_]] extends RunSqlStatements[F] {
 
   def findCountriesByName(args: String): F[List[SmallCountry]]
 
