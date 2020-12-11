@@ -9,7 +9,7 @@ import skunk.implicits._
 
 object Commands {
 
-  val insertSingleCityStmt: Command[City] =
+  val insertCityStmt: Command[City] =
     sql"""
     INSERT INTO city(name, countrycode, district, population)
     VALUES ($varchar, $bpchar, $varchar, $int4)

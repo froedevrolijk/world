@@ -11,7 +11,7 @@ import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{ HttpRoutes, _ }
 
-trait CityRoutes[F[_]] extends Http4sDsl[F] {
+trait CityRoutes[F[_]] extends Http4sDsl[F] with InputValidation[F] {
 
   def cityQueries: HttpRoutes[F]
 }
@@ -30,9 +30,9 @@ object CityRoutes {
         HttpRoutes.of[F] {
           case req @ POST -> Root / "cities" =>
             val citiesOutput = for {
-              requestCountryCode  <- req.as[QueryCity]
-              filteredCountryCode <- filterEmptyRequestBody(requestCountryCode.countryCode)
-              cities              <- queryCityService.findCitiesPerCountry(filteredCountryCode)
+              request         <- req.as[QueryCity]
+              filteredRequest <- filterEmptyRequestBody(request.countryCode)
+              cities          <- queryCityService.findCitiesPerCountry(filteredRequest)
             } yield cities.asJson
             Ok(citiesOutput)
 
@@ -49,8 +49,5 @@ object CityRoutes {
       //
       //          }
 
-      def filterEmptyRequestBody(s: String): F[String] =
-        if (s == null || s.trim.isEmpty) F.raiseError[String](EmptyRequestException("request body was empty"))
-        else F.pure[String](s)
     }
 }

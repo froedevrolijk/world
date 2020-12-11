@@ -8,10 +8,11 @@ import com.froedevrolijk.api.session.RunSession
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.deriveDecoder
+import io.circe.syntax._
 import natchez.Trace.Implicits.noop
-import org.http4s.circe.jsonOf
+import org.http4s.circe.{ jsonOf, _ }
 import org.http4s.dsl.Http4sDsl
-import org.http4s.{ EntityDecoder, HttpRoutes }
+import org.http4s.{ EntityDecoder, HttpRoutes, Response }
 import skunk.Session
 
 trait CommandRoutes[F[_]] extends Http4sDsl[F] {
@@ -30,6 +31,7 @@ object CommandRoutes {
       implicit val updateCityDecoder: EntityDecoder[F, UpdateCity]       = jsonOf[F, UpdateCity]
       implicit val updateCountryDecoder: EntityDecoder[F, UpdateCountry] = jsonOf[F, UpdateCountry]
       implicit val decodeCityList: Decoder[Cities]                       = deriveDecoder[Cities]
+//      implicit val encodeFUnit: Encoder[F[Unit]]                         = Encoder[F[Unit]]
 
       def session: Resource[F, Session[F]] =
         for {
@@ -41,16 +43,15 @@ object CommandRoutes {
           case req @ POST -> Root / "add-city" =>
             val result = for {
               city <- req.as[City]
-              _    <- commandService.insertSingleCity(city)
-              //session.map(CommandService.impl[F](_)).use(s => s.insertSingleCity(city))
-            } yield ()
+              _    <- commandService.insertCity(city)
+            } yield ().asJson
             Ok(result)
 
           case req @ PUT -> Root / "update-city" =>
             val result = for {
               updatedCity <- req.as[UpdateCity]
               _           <- commandService.updateCity(updatedCity)
-            } yield ()
+            } yield ().asJson
             Ok(result)
 
           case req @ PUT -> Root / "update-country" =>
