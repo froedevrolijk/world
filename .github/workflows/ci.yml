@@ -10,11 +10,9 @@ on:
 
 jobs:
   build:
-
-  api_job:
-    name: Build API
     runs-on: ubuntu-latest
 
+  api_job:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -51,9 +49,6 @@ jobs:
           tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:0.1
 
   frontend_job:
-    name: Build and Push Frontend
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -77,6 +72,6 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-#          platforms: linux/amd64,linux/arm64,linux/386
+          #          platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:0.1
