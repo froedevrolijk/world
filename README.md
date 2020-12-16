@@ -1,11 +1,18 @@
 # Mastery Day Q3/4
 
-#### Start project
+#### How to start the project
 Connect to docker container:  
-`docker-compose -f docker-compose.yml up -d`
+`docker-compose -f docker/docker-compose.yml up -d`
 
-Then:  
-`sbt run`
+### How to test
+
+- unit tests: `sbt test`
+- integration tests: `sbt it:test`
+- all tests: `sbt test it:test`
+
+### How to run
+
+- Run the application: `sbt run`
 
 #### Check the running container
 Launch a bash terminal within the container:  
@@ -94,7 +101,7 @@ or
 `docker-compose -f docker-compose.yml up -d`
 
 ## API
-`docker run -it -p 9000:9001 --rm --name world-api world-api:0.1`
+`docker run -it -p 9000:9000 --rm --name world-api world-api:0.1`
 
 ```json
 {
