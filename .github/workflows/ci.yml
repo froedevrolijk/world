@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:0.1
+          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
 
   frontend_job:
     name: Test, build and push frontend
@@ -75,6 +75,5 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          #          platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:0.1
+          tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:latest
