@@ -8,10 +8,10 @@ on:
     branches:
       - develop
 
+jobs:
   build:
     runs-on: ubuntu-latest
 
-jobs:
   api_job:
     name: Test, Build and Push API
 
