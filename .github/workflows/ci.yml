@@ -48,6 +48,8 @@ jobs:
           tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:0.1
 
   frontend_job:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
