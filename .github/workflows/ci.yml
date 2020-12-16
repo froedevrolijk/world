@@ -10,6 +10,7 @@ on:
 
 jobs:
   api_job:
+    name: Test, build and push API
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +49,7 @@ jobs:
           tags: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:0.1
 
   frontend_job:
+    name: Test, build and push frontend
     runs-on: ubuntu-latest
 
     steps:
