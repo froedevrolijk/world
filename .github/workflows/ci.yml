@@ -9,11 +9,12 @@ on:
       - develop
 
 jobs:
-  api_job:
-    name: Test, Build and Push API
 
   build:
     runs-on: ubuntu-latest
+
+  api_job:
+    name: Test, Build and Push API
 
     steps:
       - name: Checkout
