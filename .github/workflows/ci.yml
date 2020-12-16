@@ -9,10 +9,9 @@ on:
       - develop
 
 jobs:
-  build:
+  api_job:
     runs-on: ubuntu-latest
 
-  api_job:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
