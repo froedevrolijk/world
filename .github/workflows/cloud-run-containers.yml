@@ -1,4 +1,4 @@
-name: publish
+name: Deploy Containers to Cloud Run
 
 on:
   push:
@@ -17,12 +17,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set up gcloud Cloud SDK environment
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.CR_JSON_KEY }}
+          export_default_credentials: true
+
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v0.3.0
         with:
-          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend
+          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:latest
           service: world-frontend
-          credentials: ${{ secrets.CR_JSON_KEY }}
 
   cloud_run_api_deployment:
     name: Cloud Run API Deployment
@@ -32,9 +38,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set up gcloud Cloud SDK environment
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.CR_JSON_KEY }}
+          export_default_credentials: true
+
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v0.3.0
         with:
-          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api
+          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
           service: world-api
-          credentials: ${{ secrets.CR_JSON_KEY }}
