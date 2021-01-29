@@ -27,6 +27,7 @@ jobs:
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v0.3.0
         with:
+          env_vars: REGION=europe-west4
           image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:latest
           service: world-frontend
 
@@ -48,5 +49,6 @@ jobs:
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v0.3.0
         with:
+          env_vars: REGION=europe-west4
           image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
           service: world-api
