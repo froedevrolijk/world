@@ -1,0 +1,40 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - error-handling
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  cloud_run_frontend_deployment:
+    name: Cloud Run Frontend Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v0.3.0
+        with:
+          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend
+          service: world-frontend
+          credentials: ${{ secrets.CR_JSON_KEY }}
+
+  cloud_run_api_deployment:
+    name: Cloud Run API Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v0.3.0
+        with:
+          image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api
+          service: world-api
+          credentials: ${{ secrets.CR_JSON_KEY }}
