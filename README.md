@@ -34,8 +34,7 @@ List tables:
 
 Check if the application is up and running:
 ```
-curl -k -v -X GET http://localhost:8086/keepalive \
--H 'Content-Type: text/json'
+curl -k -v -X GET http://localhost:8086/keepalive
 ```
 
 ### Cities

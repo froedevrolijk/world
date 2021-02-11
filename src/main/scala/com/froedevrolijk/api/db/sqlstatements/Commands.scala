@@ -42,6 +42,12 @@ object Commands {
     """.command
       .gcontramap[UpdateCountry]
 
+//   TODO https://http4s.org/v0.21/methods/
+  //        case req @ PUT -> Root / "tweets" / IntVar(tweetId) =>
+  //      req.as[Tweet]
+  //      .flatMap(updateTweet(tweetId, _))
+  //      .flatMap(_.fold(NotFound())(Ok(_)))
+
 //  val deleteCityStmt: Command[UUID] =
 //    sql"""
 //    DELETE FROM city
