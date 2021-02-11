@@ -2,7 +2,7 @@ package com.froedevrolijk.api.routes
 
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
-import com.froedevrolijk.api.db.datamodels.{ Cities, City, UpdateCity, UpdateCountry }
+import com.froedevrolijk.api.db.datamodels.{ Cities, City, Country, UpdateCity, UpdateCountry, UpdateCountryMinor }
 import com.froedevrolijk.api.service.CommandService
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
@@ -30,6 +30,7 @@ object CommandRoutes {
       implicit val cityDecoder: EntityDecoder[F, City]                   = jsonOf[F, City]
       implicit val updateCityDecoder: EntityDecoder[F, UpdateCity]       = jsonOf[F, UpdateCity]
       implicit val updateCountryDecoder: EntityDecoder[F, UpdateCountry] = jsonOf[F, UpdateCountry]
+      implicit val countryDecoder: EntityDecoder[F, UpdateCountryMinor]  = jsonOf[F, UpdateCountryMinor]
       implicit val decodeCityList: Decoder[Cities]                       = deriveDecoder[Cities]
 //      implicit val encodeFUnit: Encoder[F[Unit]]                         = Encoder[F[Unit]]
 
@@ -47,24 +48,17 @@ object CommandRoutes {
             } yield ().asJson
             Ok(result)
 
-          case req @ PUT -> Root / "update-city" =>
+          case req @ PUT -> Root / "update-country" / UUIDVar(countryCode) =>
             val result = for {
-              updatedCity <- req.as[UpdateCity]
-              _           <- commandService.updateCity(updatedCity)
+              country <- req.as[UpdateCountryMinor]
+              _       <- commandService.updateCountry(country, countryCode)
             } yield ().asJson
             Ok(result)
 
-          case req @ PUT -> Root / "update-country" =>
-            val result = for {
-              updatedCountry <- req.as[UpdateCountry]
-              _              <- commandService.updateCountry(updatedCountry)
-            } yield ()
-            Ok(result)
-
-          case DELETE -> Root / "delete-city" / UUIDVar(cityId) =>
-            commandService
-              .deleteCity(cityId)
-              .flatMap(_ => Ok())
+//          case DELETE -> Root / "delete-city" / UUIDVar(cityId) =>
+//            commandService
+//              .deleteCity(cityId)
+//              .flatMap(_ => Ok())
 
           case DELETE -> Root / "delete-country" / UUIDVar(countryCode) =>
             commandService

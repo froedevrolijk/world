@@ -1,7 +1,7 @@
 package com.froedevrolijk.api.db.sqlstatements
 
 import com.froedevrolijk.api.db.datamodels.{ City, CityName, Country, SmallCountry }
-import skunk.codec.all.{ bpchar, int4, numeric, text, varchar }
+import skunk.codec.all.{ bpchar, int4, int8, numeric, text, varchar }
 import skunk.implicits._
 import skunk.{ Query, Void }
 

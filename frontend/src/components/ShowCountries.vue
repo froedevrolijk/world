@@ -217,42 +217,17 @@ export default {
     this.initialize();
   },
 
-  mounted() {
-    instance.get("/get-all-cities").then((response) => {
-      this.cities = response.data;
-    });
-  },
+  // mounted() {
+    // instance.get("/get-all-countries").then((response) => {
+    //   this.cities = response.data;
+    // });
+  // },
 
   methods: {
     initialize() {
-      this.countries = [
-        {
-          code: "NLD",
-          name: "Netherlands",
-          continent: "Europe",
-          region: "Western Europe",
-          surfaceArea: 41526,
-          independenceYear: 1581,
-          population: 15864000,
-          lifeExpectancy: 78.3,
-          gnp: 371362.0,
-          governmentForm: "Constitutional Monarchy",
-          headOfState: "Beatrix",
-        },
-        {
-          code: "ALB",
-          name: "Albania",
-          continent: "Europe",
-          region: "Southern Europe",
-          surfaceArea: 28748,
-          independenceYear: 1912,
-          population: 3401200,
-          lifeExpectancy: 71.6,
-          gnp: 3205.0,
-          governmentForm: "Republic",
-          headOfState: "Rexhep Mejdani",
-        },
-      ];
+      instance.get("/get-all-countries").then((response) => {
+        this.countries = response.data;
+      });
     },
 
     editItem(item) {

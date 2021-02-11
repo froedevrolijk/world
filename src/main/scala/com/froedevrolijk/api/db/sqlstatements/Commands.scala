@@ -2,8 +2,8 @@ package com.froedevrolijk.api.db.sqlstatements
 
 import java.util.UUID
 
-import com.froedevrolijk.api.db.datamodels.{ City, UpdateCity, UpdateCountry }
-import skunk.Command
+import com.froedevrolijk.api.db.datamodels.{ City, Country, UpdateCity, UpdateCountry }
+import skunk.{ Command, Query }
 import skunk.codec.all.{ bpchar, varchar, _ }
 import skunk.implicits._
 
@@ -35,20 +35,19 @@ object Commands {
         surfacearea = $float4,
         indepyear = $int2,
         population = $int4,
-        lifeexpectancy = $float4,
         gnp = $float4,
         governmentform = $varchar,
         headofstate = $varchar
-    WHERE code = ${bpchar(3)}
+    WHERE code = $varchar
     """.command
       .gcontramap[UpdateCountry]
 
-  val deleteCityStmt: Command[UUID] =
-    sql"""
-    DELETE FROM city
-    WHERE cityid = $uuid
-    """.command
-  //  WHERE EXISTS (SELECT 1 FROM city WHERE id = $int4)
+//  val deleteCityStmt: Command[UUID] =
+//    sql"""
+//    DELETE FROM city
+//    WHERE cityid = $uuid
+//    """.command
+//  //  WHERE EXISTS (SELECT 1 FROM city WHERE id = $int4)
 
   val deleteCountryStmt: Command[UUID] =
     sql"""
