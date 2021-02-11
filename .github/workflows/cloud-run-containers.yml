@@ -52,3 +52,16 @@ jobs:
           env_vars: REGION=europe-west4
           image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
           service: world-api
+
+# 1. Test locally with containers. build containers locally and run docker-compose
+
+# 2. TODO set custom port for
+#   Frontend: 8080 -> 80
+#   API:      9000 -> 9000
+#   DB:       5432 -> 5432
+
+# test using gcloud command
+
+# 3. Integrate into GH Actions
+# https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
+# https://github.com/marketplace/actions/deploy-to-cloud-run
