@@ -34,13 +34,13 @@ List tables:
 
 Check if the application is up and running:
 ```
-curl -k -v -X GET http://localhost:8086/keepalive
+curl -k -v -X GET http://localhost:9000/keepalive
 ```
 
 ### Cities
 Add city:
 ```
-curl -k -v -X POST http://localhost:8086/add-city \
+curl -k -v -X POST http://localhost:9000/add-city \
 -H 'Content-Type: text/json' \
 -d @- << EOF
 {
@@ -55,18 +55,18 @@ EOF
 
 Delete city: // NOT USED
 ```
-curl -k -v -X DELETE http://localhost:8086/delete-city/394f15cd-e99f-4deb-94b3-4837ce6b6c27
+curl -k -v -X DELETE http://localhost:9000/delete-city/394f15cd-e99f-4deb-94b3-4837ce6b6c27
 ```
 
 ### Countries
 Get all countries:
 ```
-curl -k -v -X GET http://localhost:8086/get-all-countries
+curl -k -v -X GET http://localhost:9000/get-all-countries
 ```
 
 Update country:
 ```
-curl -k -v -X PUT http://localhost:8086/update-country/d21beae6-b83b-4051-94f3-3d4c10d4e239 \                                                                                                       ✔
+curl -k -v -X PUT http://localhost:9000/update-country/d21beae6-b83b-4051-94f3-3d4c10d4e239 \                                                                                                       ✔
 -H 'Content-Type: text/json' \
 -d @- << EOF
 {
@@ -87,7 +87,7 @@ EOF
 
 Find countries:
 ```
-curl -k -v -X POST http://localhost:8086/countries \
+curl -k -v -X POST http://localhost:9000/countries \
 -H 'Content-Type: text/json' \
 -d @- << EOF
 {
@@ -98,7 +98,7 @@ EOF
 
 Delete country:
 ```
-curl -k -v -X DELETE http://localhost:8086/delete-country/09fa682b-ad3c-421e-9484-59d7a05cd6a2
+curl -k -v -X DELETE http://localhost:9000/delete-country/09fa682b-ad3c-421e-9484-59d7a05cd6a2
 ```
 
 
