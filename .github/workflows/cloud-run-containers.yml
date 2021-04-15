@@ -1,9 +1,9 @@
 name: Deploy Containers to Cloud Run
 
 on:
-  push:
-    branches:
-      - error-handling
+#  push:
+#    branches:
+#      - error-handling
   pull_request:
     branches:
       - develop
