@@ -4,6 +4,5 @@ COPY ./ ./
 RUN sbt compile
 EXPOSE 9000
 CMD sbt run
-
 # EXPOSE 9000:9000
 # https://stackoverflow.com/questions/61522281/sbt-project-not-mounted-to-docker-container-using-docker-compose
