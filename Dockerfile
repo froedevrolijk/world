@@ -2,7 +2,7 @@ FROM hseeberger/scala-sbt:8u222_1.3.5_2.12.10
 WORKDIR /www/app
 COPY ./ ./
 RUN sbt compile
-EXPOSE $PORT
+EXPOSE 9000
 CMD sbt run
 
 # EXPOSE 9000:9000
