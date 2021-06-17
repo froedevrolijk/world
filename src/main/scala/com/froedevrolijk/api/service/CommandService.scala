@@ -3,13 +3,12 @@ package com.froedevrolijk.api.service
 import java.util.UUID
 
 import cats.Applicative
-import cats.syntax.applicativeError._
 import cats.effect.Sync
+import cats.syntax.applicativeError._
 import com.froedevrolijk.api.db.datamodels._
 import com.froedevrolijk.api.db.sqlstatements.Commands._
 import com.froedevrolijk.api.utils.Log
 import skunk.Session
-import cats.Functor.ops.toAllFunctorOps
 
 trait CommandService[F[_]] extends Log with RunSqlStatements[F] {
 
@@ -18,7 +17,6 @@ trait CommandService[F[_]] extends Log with RunSqlStatements[F] {
   def updateCity(args: UpdateCity): F[Unit]
   def updateCountry(args: UpdateCountryMinor, id: UUID): F[Unit]
 
-//  def deleteCity(id: UUID): F[Unit]
   def deleteCountry(id: UUID): F[Unit]
 
 }

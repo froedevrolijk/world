@@ -2,8 +2,8 @@ package com.froedevrolijk.api.db.sqlstatements
 
 import java.util.UUID
 
-import com.froedevrolijk.api.db.datamodels.{ City, Country, UpdateCity, UpdateCountry }
-import skunk.{ Command, Query }
+import com.froedevrolijk.api.db.datamodels.{ City, UpdateCity, UpdateCountry }
+import skunk.Command
 import skunk.codec.all.{ bpchar, varchar, _ }
 import skunk.implicits._
 
@@ -41,19 +41,6 @@ object Commands {
     WHERE code = $varchar
     """.command
       .gcontramap[UpdateCountry]
-
-//   TODO https://http4s.org/v0.21/methods/
-  //        case req @ PUT -> Root / "tweets" / IntVar(tweetId) =>
-  //      req.as[Tweet]
-  //      .flatMap(updateTweet(tweetId, _))
-  //      .flatMap(_.fold(NotFound())(Ok(_)))
-
-//  val deleteCityStmt: Command[UUID] =
-//    sql"""
-//    DELETE FROM city
-//    WHERE cityid = $uuid
-//    """.command
-//  //  WHERE EXISTS (SELECT 1 FROM city WHERE id = $int4)
 
   val deleteCountryStmt: Command[UUID] =
     sql"""

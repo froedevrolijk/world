@@ -3,7 +3,6 @@ package com.froedevrolijk.api.routes
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ContextShift, Sync, Timer }
 import com.froedevrolijk.api.db.datamodels.QueryCity
-import com.froedevrolijk.api.exception.EmptyRequestException
 import com.froedevrolijk.api.service.CityService
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -42,12 +41,6 @@ object CityRoutes {
             } yield cities.asJson
             Ok(result)
         }
-
-      //          case req @ PUT -> Root / "cities" =>
-      //          val citiesOutput = for {
-      //          name <- req.as[CityName]
-      //
-      //          }
 
     }
 }

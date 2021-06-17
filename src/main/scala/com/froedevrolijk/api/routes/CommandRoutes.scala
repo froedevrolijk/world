@@ -2,7 +2,7 @@ package com.froedevrolijk.api.routes
 
 import cats.FlatMap.ops._
 import cats.effect.{ Async, ConcurrentEffect, ContextShift, Resource, Sync, Timer }
-import com.froedevrolijk.api.db.datamodels.{ Cities, City, Country, UpdateCity, UpdateCountry, UpdateCountryMinor }
+import com.froedevrolijk.api.db.datamodels._
 import com.froedevrolijk.api.service.CommandService
 import com.froedevrolijk.api.session.RunSession
 import io.circe._
@@ -12,7 +12,7 @@ import io.circe.syntax._
 import natchez.Trace.Implicits.noop
 import org.http4s.circe.{ jsonOf, _ }
 import org.http4s.dsl.Http4sDsl
-import org.http4s.{ EntityDecoder, HttpRoutes, Response }
+import org.http4s.{ EntityDecoder, HttpRoutes }
 import skunk.Session
 
 trait CommandRoutes[F[_]] extends Http4sDsl[F] {
@@ -32,7 +32,6 @@ object CommandRoutes {
       implicit val updateCountryDecoder: EntityDecoder[F, UpdateCountry] = jsonOf[F, UpdateCountry]
       implicit val countryDecoder: EntityDecoder[F, UpdateCountryMinor]  = jsonOf[F, UpdateCountryMinor]
       implicit val decodeCityList: Decoder[Cities]                       = deriveDecoder[Cities]
-//      implicit val encodeFUnit: Encoder[F[Unit]]                         = Encoder[F[Unit]]
 
       def session: Resource[F, Session[F]] =
         for {
@@ -48,12 +47,12 @@ object CommandRoutes {
             } yield ().asJson
             Ok(result)
 
-          case req @ PUT -> Root / "update-country" / UUIDVar(countryCode) =>
-            val result = for {
-              country <- req.as[UpdateCountryMinor]
-              _       <- commandService.updateCountry(country, countryCode)
-            } yield ().asJson
-            Ok(result)
+//          case req @ PUT -> Root / "update-country" / UUIDVar(countryCode) =>
+//            val result = for {
+//              country <- req.as[UpdateCountryMinor]
+//              _       <- commandService.updateCountry(country, countryCode)
+//            } yield ().asJson
+//            Ok(result)
 
 //          case DELETE -> Root / "delete-city" / UUIDVar(cityId) =>
 //            commandService
@@ -63,7 +62,7 @@ object CommandRoutes {
           case DELETE -> Root / "delete-country" / UUIDVar(countryCode) =>
             commandService
               .deleteCountry(countryCode)
-              .flatMap(_ => Ok()) // code, exception encoded
+              .flatMap(_ => Ok())
         }
     }
 }

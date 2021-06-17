@@ -1,7 +1,5 @@
 package com.froedevrolijk.api.db.datamodels
 
-import java.util.UUID
-
 case class UpdateCountry(
     name: String,
     continent: String,
@@ -23,7 +21,7 @@ case class UpdateCountryMinor(
     surfaceArea: Double,
     independenceYear: Short,
     population: Int,
-    //    lifeExpectancy: Double,
+//    lifeExpectancy: Double,
     gnp: Double,
     governmentForm: String,
     headOfState: String
