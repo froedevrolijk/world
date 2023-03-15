@@ -4,8 +4,9 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items class="pa-3">
-        <v-btn class="ml-3" outlined color="blue darken-3"> Add Cities </v-btn>
-        <v-btn class="ml-3" outlined color="blue darken-3"> Show cities </v-btn>
+        <v-btn to="addcities" class="ml-3" outlined color="blue darken-3"> Add Cities </v-btn>
+        <v-btn to="showcities" class="ml-3" outlined color="blue darken-3"> Show cities </v-btn>
+        <v-btn to="showcountries" class="ml-3" outlined color="blue darken-3"> Show countries </v-btn>
       </v-toolbar-items>
     </v-toolbar>
   </div>

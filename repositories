@@ -1,7 +1,0 @@
-[repositories]
-  local
-  ing-ivy-proxy-releases: https://artifactory.ing.net/artifactory/releases_mvn_all/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
-  ing-maven-proxy-releases: https://artifactory.ing.net/artifactory/releases_mvn_all/
-  public-ivy-proxy-releases: https://artifactory.ing.net/artifactory/mvnpublic/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
-  public-maven-proxy-releases: https://artifactory.ing.net/artifactory/mvnpublic/
-  private-maven-insights-releases: https://artifactory.ing.net/artifactory/releases_mvn_actionable-insights/

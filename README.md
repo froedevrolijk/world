@@ -1,50 +1,20 @@
-# Mastery Day Q3/4
+# World API
 
-#### Start project
-Connect to docker container:  
-`docker-compose -f docker-compose-skunk.yml up -d`
+### Start the project
+- Start the database and frontend in a container: `docker-compose -f docker/docker-compose.yml up -d --build`
+- Run the API: `sbt run`
+- Visit the frontend at `http://localhost:8080`
 
-Then:  
-`sbt run`
-
-#### Check the running container
-Launch a bash terminal within the container:  
-`docker exec -it country-db bash`
-
-Connect to postgres database:
-`psql -h localhost -U user countrydb`
-
-List databases:  
-`\l`
-
-Switch connection to database `countrydb`:  
-`\c countrydb`
-
-List tables:  
-`\dt`
-
-### Send requests
-
+### Send requests via cURL
 Check if the application is up and running:
 ```
-curl -k -v -X GET http://localhost:8086/keepalive \
--H 'Content-Type: text/json'
+curl -k -v -X GET http://localhost:9000/keepalive
 ```
 
-Find countries:
+#### Cities
+Add a city:
 ```
-curl -k -v -X POST http://localhost:8086/countries \
--H 'Content-Type: text/json' \
--d @- << EOF
-{
-  "country": "U%"
-}
-EOF
-```
-
-Add city:
-```
-curl -k -v -X POST http://localhost:8086/add-city \
+curl -k -v -X POST http://localhost:9000/add-city \
 -H 'Content-Type: text/json' \
 -d @- << EOF
 {
@@ -57,15 +27,19 @@ curl -k -v -X POST http://localhost:8086/add-city \
 EOF
 ```
 
-## Frontend
-Build Docker image of our frontend application:
-`docker build -t md-frontend-image .`
+#### Countries
+Get all countries:
+```
+curl -k -v -X GET http://localhost:9000/get-all-countries
+```
 
-Run frontend in a Docker container:
-`docker run -it -p 8080:80 --rm --name md-frontend md-frontend-image`
-
-or
-`docker-compose -f docker-compose.yml up -d`
-
-## API
-`docker run -it -p 9000:9001 --rm --name api mastery-day-2019-q3:0.1`
+Find countries:
+```
+curl -k -v -X POST http://localhost:9000/countries \
+-H 'Content-Type: text/json' \
+-d @- << EOF
+{
+  "country": "U%"
+}
+EOF
+```

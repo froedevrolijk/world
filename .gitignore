@@ -3,3 +3,6 @@
 target
 out
 *.log
+docker/project
+docker/target
+.bsp

@@ -15,7 +15,7 @@ object RunSession {
 
   def impl[F[_]: ContextShift: ConcurrentEffect](implicit
       T: Trace[F]
-  ): RunSession[F] = //  onctextshift concurrentcontet
+  ): RunSession[F] =
     new RunSession[F] {
 
       override def session: Resource[F, Session[F]] = {
