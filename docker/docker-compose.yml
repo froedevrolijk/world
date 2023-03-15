@@ -3,38 +3,28 @@ version: '3.5'
 services:
 
   db:
-    container_name: country-db
+    container_name: world-db
     image: postgres:11
     restart: always
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: countrydb
+      POSTGRES_DB: world
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
       - ./world.sql:/docker-entrypoint-initdb.d/world.sql
 
-#  api:
-#    container_name: world-api
-#    image: mastery-day-2019-q3:0.1
-#    restart: always
-#    ports:
-#      - '9000:9000'
-#    depends_on:
-#      - db
-
-#  frontend:
-#    container_name: frontend
-#    image: vue-frontend1:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    volumes:
-#      - '.:/app'
-#      - '/app/node_modules'
-#    ports:
-#      - '8080:80'
-#    depends_on:
-#      - db
+  frontend:
+    container_name: world-frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
 

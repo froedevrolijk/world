@@ -15,7 +15,6 @@ object Dependencies {
     val server  = "org.http4s" %% "http4s-blaze-server" % version
     val dsl     = "org.http4s" %% "http4s-dsl"          % version
     val circe   = "org.http4s" %% "http4s-circe"        % version
-    //    val circe   = "org.http4s" %% "http4s-circe" % version
   }
 
   object Circe {

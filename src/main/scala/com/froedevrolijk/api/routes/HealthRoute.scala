@@ -11,7 +11,7 @@ trait HealthRoute[F[_]] extends Http4sDsl[F] {
 
 object HealthRoute {
 
-  def impl[F[_]: Async]: HealthRoute[F] = // TODO add service
+  def impl[F[_]: Async]: HealthRoute[F] =
     new HealthRoute[F] {
 
       override def healthRoute: HttpRoutes[F] =
