@@ -17,24 +17,27 @@ services:
 
 #  api:
 #    container_name: world-api
-#    image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
+##    build:
+##      context: .
+##      dockerfile: Dockerfile
+#    image: world-api # europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-api:latest
 #    restart: always
 #    ports:
 #      - '9000:9000'
 #    depends_on:
 #      - db
-#
-#  frontend:
-#    container_name: frontend
-#    image: europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    volumes:
-#      - '.:/app'
-#      - '/app/node_modules'
-#    ports:
-#      - '8080:80'
-#    depends_on:
-#      - db
+
+  frontend:
+    container_name: frontend
+    image: md-frontend-image #europe-west4-docker.pkg.dev/froedevrolijk-world/world-docker-registry/world-frontend:latest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
 

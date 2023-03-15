@@ -138,15 +138,3 @@ or
     ]
 }
 ```
-
-### TODOS
-- add logging
-- add error handling
-- add unit / integration tests
-- add database migration
-
-Furthermore: 
-- add containers setup locally
-- deploy containers to GCP
-- Github Actions
-

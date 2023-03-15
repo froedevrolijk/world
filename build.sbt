@@ -3,8 +3,8 @@ import com.typesafe.sbt.packager.Keys.{ dockerBaseImage, packageName }
 
 enablePlugins(JavaAppPackaging, AshScriptPlugin)
 
-dockerBaseImage := "openjdk:8-jre-alpine"
-packageName in Docker := "world"
+dockerBaseImage := "openjdk:11-jre-alpine"
+Docker / packageName := "world"
 dockerExposedPorts ++= Seq(9000, 9000)
 
 libraryDependencies ++= Seq(
